@@ -1,4 +1,4 @@
 - [GitHub](https://github.com/Yeonny0723)
 - [Blog](https://yeonny0723.github.io/blog/)
-- [PFPlay](https://pfplay.xyz/)
-- [agent-orchestration](https://github.com/Yeonny0723/agent-orchestration)
+- [PFPlay(사이드프로젝트) 실시간 음악 스트리밍 DJ 플랫폼](https://pfplay.xyz/)
+- [Wanted AI Builder Championship · OnCue Orchestration](https://oncue-labs.github.io/oncue-orchestration/)
