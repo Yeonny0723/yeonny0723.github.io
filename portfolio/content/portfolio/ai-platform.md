@@ -18,3 +18,9 @@ Mind-SAT AI Python 백엔드에 OpenAI SDK·LangChain 기반 메일 템플릿 �
 - 결과 품질을 같은 평가셋으로 비교할 수 있게 한다.
 - 비용·지연시간·동시성·재처리를 사용자 흐름과 함께 설계한다.
 - 인증·권한·개인정보·Prompt Injection 같은 보안 위협을 제품 조건으로 본다.
+
+## Agentic AI와 개발 표준
+
+개인 프로젝트 `agent-orchestration`에서는 AI Agent의 작업 규모 판정·spec 승인·TDD 구현·테스트 민감도 검증·PR 작성 흐름을 하나의 하네스로 묶었습니다. Claude Code와 Codex 양쪽에서 같은 판단 기준을 사용하도록 plugin은 얇게 두고, 공통 skill에 절차와 검증 규칙을 모았습니다.
+
+이 경험은 Agentic AI를 단순히 호출하는 데서 그치지 않고, 승인 경계·복원 안전성·테스트 감지력·외부 쓰기 권한까지 포함한 운영 기준으로 확장한 사례입니다.

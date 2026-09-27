@@ -8,6 +8,7 @@
 
 - Python 백엔드에 OpenAI SDK·LangChain 기반 LLM 기능을 연결하고, 비동기 API·Queue/Worker·문서 처리 파이프라인을 제품 흐름으로 구현했습니다.
 - Golden Dataset을 기준으로 검색·RAG·Text2SQL을 단계별로 평가하고, 기대 문서/span과 실제 결과를 비교해 품질 개선 지점을 추적했습니다.
+- AI Agent가 작업 규모 판정·승인·테스트·PR 작성까지 일관된 절차로 수행하도록 개발 하네스를 설계·구현하고 공개 저장소로 배포했습니다.
 - 인증·권한·멀티테넌트·악성 콘텐츠 처리·고가용성 인프라를 고려하며 기업용 보안 제품을 운영했습니다.
 
 ## AI Position Fit
@@ -15,7 +16,8 @@
 ### 필수 역량과 연결
 
 - **Python 기반 백엔드 API** — Mind-SAT AI 서비스의 Python 백엔드에 LLM 기능을 연결하고 동시성·비동기 처리 관점을 검토했습니다.
-- **LLM API·RAG 기반 서비스** — OpenAI SDK·LangChain 기반 AI 메일 템플릿 생성과 Wrapsody 문서 검색·RAG 품질 평가를 수행했습니다.
+- **LLM API·RAG·Agent 기반 서비스** — OpenAI SDK·LangChain 기반 AI 메일 템플릿 생성, Wrapsody 문서 검색·RAG 품질 평가, Claude Code·Codex 기반 Agent 하네스를 개발했습니다.
+- **Prototype·협업 검증·서비스 운영** — LLM Wiki 기반 문서 질의응답 PoC, Playwright 평가 자동화, OCI 고가용성 전환과 장애 복구 검증을 수행했습니다.
 - **SQL 연동과 비동기 처리** — MSSQL 기반 사내 시스템과 ERP 동기화를 경험했고, 문서 생성에서는 `requestId`·Queue·Worker 기반 수명주기를 설계했습니다.
 - **테스트·Git·CI/CD·운영** — Playwright 평가 자동화, GitLab/Jenkins CI/CD, OCI 고가용성 전환과 장애 복구 검증을 수행했습니다.
 
@@ -24,8 +26,7 @@
 - **MCP·엔터프라이즈 API·사내 시스템 통합** — 사내 디자인 시스템 MCP, Microsoft Graph API, 고객사별 멀티테넌트 시스템을 개발했습니다.
 - **LLM 평가·품질 비교** — 36개 golden dataset으로 expected document/span, 검색, 최종 응답을 단계별 비교했습니다.
 - **React/TypeScript UI** — AI 결과 표시·sanitize와 React·TypeScript 기반 제품 UI를 함께 구현했습니다.
-
-현재 경험 자료에 없는 LangGraph, NoSQL, PyTorch/TensorFlow, 제조업 AI, 비즈니스 영어 구사 경험은 보유 역량으로 표시하지 않습니다.
+- **기술 표준·협업** — 공통 디자인 시스템 MCP, CI/CD 기준, AI 개발 하네스의 승인·검증 절차를 구성했습니다.
 
 ## Skills
 
@@ -50,6 +51,11 @@
 - Mind-SAT AI Python 백엔드에 OpenAI SDK·LangChain 기반 메일 템플릿 추천·생성 기능을 연결하고, 산업군·부서·직급·기술 이해도·위협 수준을 prompt 컨텍스트로 구조화했습니다.
 - OCI Instance Pool 2대와 Private Load Balancer 기반으로 AI 서버를 전환해 단일 인스턴스 장애에 대한 복구 구조를 구성하고 중지 테스트로 복구 동작을 확인했습니다.
 - TypeScript AST·Storybook·JSDoc·디자인 토큰을 분석해 AI Agent가 사내 디자인 시스템을 조회하는 MCP를 개발했습니다.
+
+#### AI Agent 개발 도구 · 2026.08 – 현재
+
+- Claude Code와 Codex에서 작업 규모 판정, spec 승인, TDD 구현, 테스트 민감도 검증, PR 작성까지 같은 절차로 수행하도록 `agent-orchestration` 하네스를 단독 설계·개발했습니다.
+- 결함 주입과 안전한 byte snapshot 복원을 검증 흐름에 넣고, Claude Code·Codex 플러그인으로 배포했습니다.
 
 #### 제품·플랫폼 개발 · 2023–2025
 

@@ -68,6 +68,12 @@ Mind-SAT AI의 Python 백엔드에서 OpenAI SDK·LangChain 기반 메일 템플
 
 사내 디자인 시스템을 AI Agent가 조회할 수 있도록 TypeScript AST·Storybook·JSDoc·디자인 토큰을 `generated-registry.json`으로 구조화하고 MCP 서버를 만들었습니다. 공통 컴포넌트의 존재 여부와 props·훅·색상·아이콘 사용 규칙을 조회 가능한 정보로 바꿔, AI가 임의의 UI 규칙을 생성하는 위험을 줄였습니다.
 
+## 5. Agentic AI 개발 흐름과 기술 표준
+
+개인 프로젝트 `agent-orchestration`에서는 AI Agent가 작업 규모 판정부터 spec 승인, TDD 구현, 테스트 민감도 검증, PR 작성까지 일관된 절차로 수행하도록 하네스를 설계했습니다. Claude Code와 Codex의 차이는 얇은 plugin adapter로 감싸고, 실제 판단과 검증 기준은 공통 skill로 유지했습니다.
+
+모든 작업에 같은 절차를 강제하지 않도록 작업 규모에 따라 기획 깊이와 승인 경계를 달리하고, 결함 주입으로 테스트가 실제로 회귀를 감지하는지 확인하는 단계를 넣었습니다. 이 경험을 통해 AI 기능 자체뿐 아니라 AI가 제품과 개발 과정에서 어떤 기준으로 행동해야 하는지도 설계하게 되었습니다.
+
 ## 기술 범위
 
 Python · OpenAI SDK · LangChain · RAG · Prompt Engineering · Golden Dataset · Playwright · Text2SQL · Async Processing · Queue/Worker · OCI · Instance Pool · Private Load Balancer · React · TypeScript · MCP
