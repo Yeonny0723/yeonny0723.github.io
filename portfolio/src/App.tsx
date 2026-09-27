@@ -45,17 +45,17 @@ const NAV_ITEMS: NavItem[] = [
     { id: 'resume-ai', label: 'AI Engineer' },
     { id: 'resume-frontend', label: 'Frontend Engineer' },
   ] },
-  { id: 'careers', label: 'Career Description', children: [
-    { id: 'career-ai', label: 'AI Engineer' },
-    { id: 'career-frontend', label: 'Frontend Engineer' },
-  ] },
-  { id: 'portfolio', label: 'Portfolio' },
   { id: 'timeline', label: 'Work Timeline' },
   { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },
   { id: 'certifications', label: 'Certifications' },
   { id: 'activities', label: 'Activities' },
   { id: 'links', label: 'Links' },
+  { id: 'careers', label: 'Career Description', children: [
+    { id: 'career-ai', label: 'AI Engineer' },
+    { id: 'career-frontend', label: 'Frontend Engineer' },
+  ] },
+  { id: 'portfolio', label: 'Portfolio' },
 ];
 
 function DocumentArticle({ id, title, bodyHtml }: { id: string; title: string; bodyHtml: string }) {
@@ -97,19 +97,6 @@ export default function App() {
             <DocumentArticle id="resume-frontend" title="Frontend Engineer Resume" bodyHtml={resumeFrontend.bodyHtml} />
           </Section>
 
-          <Section id="careers" title="Career Description">
-            <nav className={styles.sectionLinks} aria-label="경력기술서 바로가기">
-              <a href="#career-ai">AI Engineer</a>
-              <a href="#career-frontend">Frontend Engineer</a>
-            </nav>
-            <DocumentArticle id="career-ai" title="AI Engineer Career Description" bodyHtml={careerAi.bodyHtml} />
-            <DocumentArticle id="career-frontend" title="Frontend Engineer Career Description" bodyHtml={careerFrontend.bodyHtml} />
-          </Section>
-
-          <Section id="portfolio" title="Portfolio">
-            <Prose html={portfolio.bodyHtml} />
-          </Section>
-
           <Section id="timeline" title="Work Timeline">
             <Prose html={timeline.bodyHtml} />
           </Section>
@@ -132,6 +119,19 @@ export default function App() {
 
           <Section id="links" title="Links">
             <Prose html={links.bodyHtml} />
+          </Section>
+
+          <Section id="careers" title="Career Description">
+            <nav className={styles.sectionLinks} aria-label="경력기술서 바로가기">
+              <a href="#career-ai">AI Engineer</a>
+              <a href="#career-frontend">Frontend Engineer</a>
+            </nav>
+            <DocumentArticle id="career-ai" title="AI Engineer Career Description" bodyHtml={careerAi.bodyHtml} />
+            <DocumentArticle id="career-frontend" title="Frontend Engineer Career Description" bodyHtml={careerFrontend.bodyHtml} />
+          </Section>
+
+          <Section id="portfolio" title="Portfolio">
+            <Prose html={portfolio.bodyHtml} />
           </Section>
         </main>
         <Footer name={profile.meta.name} />
