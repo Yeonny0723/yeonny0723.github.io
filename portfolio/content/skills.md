@@ -14,24 +14,25 @@ skills:
   - OpenAI SDK
   - LangChain
   - MCP
+  - RAG
+  - Text2SQL
   - Playwright
-  - Microsoft Graph API
-  - Office.js
   - GitLab CI/CD
   - Jenkins
-  - OCI
   - WebSocket
+  - OAuth 2.0
+  - CSP
 ---
 
-**Frontend** React · TypeScript · Next.js · TanStack Query · Redux Toolkit · Vite · Webpack · Storybook · TypeDoc
+**Frontend** React · TypeScript · Next.js · TanStack Query · Redux Toolkit · Vite · Webpack · Storybook
 
-**Frontend Quality** Playwright · WebSocket · Virtualization · Code Splitting · Dynamic Import · Design Tokens · Accessibility
+**Frontend Quality** Playwright · WebSocket · Virtualization · Code Splitting · Dynamic Import · TypeDoc · Accessibility
 
-**Backend & Integration** Python · Node.js · Express · ASP.NET Core · MSSQL · REST API · Microsoft Graph API · Office.js
+**Backend** Python · Node.js · Express · ASP.NET Core · MSSQL · REST API · Concurrency
 
 **AI Product** OpenAI SDK · LangChain · MCP · LLM Application · Agentic Workflow · RAG · Text2SQL · LLM Evaluation
 
-**Operations** Python Concurrency · OCI · Instance Pool · Private Load Balancer · Jenkins · GitLab CI/CD · Vercel
+**Delivery & Operations** Async Processing · CI/CD · Jenkins · GitLab CI/CD
 
 **Security** OAuth 2.0 · OAuth PKCE · CSP · Content Sanitization · npm Audit · Dependency Security
 

@@ -16,7 +16,7 @@
 
 **Frontend Quality** Playwright · WebSocket · Virtualization · Code Splitting · Dynamic Import · Design Tokens · Accessibility
 
-**Backend & Integration** Node.js · Express · REST API · ASP.NET Core · MSSQL · Microsoft Graph API · Office.js · Vercel
+**Backend & Platform** Node.js · Express · REST API · ASP.NET Core · MSSQL · CI/CD
 
 **Platform & Security** GitLab CI/CD · Jenkins · OAuth 2.0 · OAuth PKCE · CSP · Content Sanitization
 

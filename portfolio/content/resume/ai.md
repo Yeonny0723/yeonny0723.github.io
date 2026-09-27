@@ -14,9 +14,9 @@
 
 **AI Application** Python · OpenAI SDK · LangChain · MCP · LLM Application · Agentic Workflow · RAG · Text2SQL · LLM Evaluation
 
-**Backend & Operations** Node.js · Express · ASP.NET Core · MSSQL · REST API · Python Concurrency · OCI · Load Balancing · Jenkins · GitLab CI/CD
+**Backend & Operations** Node.js · Express · ASP.NET Core · MSSQL · REST API · Async Processing · Concurrency · CI/CD
 
-**Product Engineering** React · TypeScript · Next.js · Microsoft Graph API · Office.js · Playwright · Storybook
+**Product Engineering** React · TypeScript · Next.js · Playwright · Storybook
 
 **Security** OAuth 2.0 · OAuth PKCE · CSP · Content Sanitization · npm Audit · Dependency Security
 
