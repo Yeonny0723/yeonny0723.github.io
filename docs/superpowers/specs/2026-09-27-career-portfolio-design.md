@@ -65,6 +65,12 @@ AI 제품 개발과 운영 품질을 앞에 둔다.
 - AI 기능의 사용자 흐름과 운영 검증
 - 개발 생산성·보안 거버넌스는 보조 사례로 포함
 
+공고의 필수·우대 역량은 별도 `AI Position Fit` 블록으로 정리한다. 공고와 일치한다고 보이기 위해 경험을 과장하지 않고, 근거가 확인된 항목만 다음처럼 연결한다.
+
+- 필수 역량과 연결: Python 백엔드·REST API, LLM API·RAG·Agent/Prompt 기반 기능, SQL 연동, 비동기·동시성 처리, 테스트·Git·CI/CD, 서비스 운영·장애 대응
+- 우대 역량과 연결: LangChain 기반 LLM 애플리케이션, MCP 커넥터, 엔터프라이즈 API·사내 시스템 통합, LLM 평가 자동화·품질 비교, React/TypeScript UI
+- 현재 근거가 없는 항목: LangGraph 사용, NoSQL, PyTorch/TensorFlow, 제조업 AI, 비즈니스 영어 구사. 이 항목들은 보유 역량처럼 표시하지 않고 문서에서 제외한다.
+
 ### Frontend Engineer 이력서
 
 제품 UI와 프론트엔드 플랫폼 경험을 앞에 둔다.

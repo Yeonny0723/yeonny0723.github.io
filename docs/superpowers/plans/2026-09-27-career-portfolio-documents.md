@@ -79,6 +79,25 @@ Use `초안/RESUME/ai.md`, `초안/RESUME/frontend.md`, `초안/PORTFOLIO/*.md`,
 
 Represent Golden Dataset, search, RAG, and Text2SQL as one bullet titled `AI 품질 평가 체계`; do not present them as separate achievements. Put document generation, asynchronous processing, cost/latency control, guardrails, HA infrastructure, and security-aware product operation before supporting tooling.
 
+Add a compact `AI Position Fit` block that maps only evidenced experience to the target posting:
+
+```markdown
+## AI Position Fit
+
+### 필수 역량과 연결
+- Python 백엔드·REST API: Mind-SAT AI 서비스 백엔드 기능 개발
+- LLM API·RAG·Agent/Prompt: OpenAI SDK·LangChain 연동, RAG grounding·fallback·prompt 정책
+- SQL 연동·비동기 처리: MSSQL 기반 시스템 경험, requestId/worker 기반 문서 생성, Python 동시성 검토
+- 테스트·Git·CI/CD·운영: Playwright 평가 자동화, Jenkins/GitLab CI/CD, 서비스 장애·배포 검증
+
+### 우대 역량과 연결
+- MCP·엔터프라이즈 API·사내 시스템 통합: Design System MCP, Microsoft Graph API, 사내 업무 시스템
+- LLM 평가·품질 비교: golden dataset, expected document/span, 검색·RAG·Text2SQL 단계별 평가
+- React/TypeScript UI: AI 결과 표시와 제품 UI, M365 Web Add-in 및 디자인 시스템
+```
+
+Do not add LangGraph, NoSQL, PyTorch/TensorFlow, manufacturing AI, or business-English claims unless a later user-supplied source verifies them.
+
 - [ ] **Step 3: Write the Frontend resume with product and platform emphasis**
 
 Lead with M365 Web Add-in migration, React/TypeScript product work, design systems, performance, Playwright E2E, CI/CD, and PFPlay. Include `npm-supply-chain-guard` as frontend developer tooling and security governance, not as a customer-facing product feature.
@@ -334,6 +353,7 @@ Open each URL and confirm the visible title and document body change without a f
 ```
 
 Confirm that the AI evaluation capability appears once as a unified Golden Dataset/search/RAG/Text2SQL story, and that npm supply-chain guard appears under engineering security tooling rather than product security.
+Confirm that the AI resume contains a visible `AI Position Fit` block with the evidenced Python, LLM API/RAG, SQL, async, testing/CI/CD, MCP, enterprise integration, evaluation, and React/TypeScript mappings, and does not claim unsupported LangGraph, NoSQL, PyTorch/TensorFlow, manufacturing AI, or business-English experience.
 
 - [ ] **Step 3: Verify invalid hashes**
 
