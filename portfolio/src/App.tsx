@@ -13,6 +13,7 @@ import certificationsDoc from '/content/certifications.md';
 import educationDoc from '/content/education.md';
 import linksDoc from '/content/links.md';
 import skillsDoc from '/content/skills.md';
+import timelineDoc from '/content/timeline.md';
 import resumeAiDoc from '/content/resume/ai.md';
 import resumeFrontendDoc from '/content/resume/frontend.md';
 import careerAiDoc from '/content/career/ai.md';
@@ -30,6 +31,7 @@ const certifications = certificationsDoc as unknown as ContentDoc;
 const education = educationDoc as unknown as ContentDoc;
 const links = linksDoc as unknown as ContentDoc;
 const skills = skillsDoc as unknown as ContentDoc;
+const timeline = timelineDoc as unknown as ContentDoc;
 const resumeAi = resumeAiDoc as unknown as ContentDoc;
 const resumeFrontend = resumeFrontendDoc as unknown as ContentDoc;
 const careerAi = careerAiDoc as unknown as ContentDoc;
@@ -48,6 +50,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: 'career-frontend', label: 'Frontend Engineer' },
   ] },
   { id: 'portfolio', label: 'Portfolio' },
+  { id: 'timeline', label: 'Work Timeline' },
   { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },
   { id: 'certifications', label: 'Certifications' },
@@ -105,6 +108,10 @@ export default function App() {
 
           <Section id="portfolio" title="Portfolio">
             <Prose html={portfolio.bodyHtml} />
+          </Section>
+
+          <Section id="timeline" title="Work Timeline">
+            <Prose html={timeline.bodyHtml} />
           </Section>
 
           <Section id="skills" title="Skills">
