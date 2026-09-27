@@ -2,7 +2,9 @@
 
 ## 문서 생성
 
-템플릿과 여러 원천 파일을 받아 docx·xlsx·pptx를 생성하는 기능에서 API와 worker를 분리하고 `requestId` 기반 상태 수명주기를 만들었습니다. 구조 추론·포맷별 chunking·슬롯 단위 추론·규칙 기반 렌더링을 조합해 LLM의 역할을 제한하고, 비용·지연시간·누락률을 함께 관리했습니다.
+템플릿과 여러 원천 파일을 받아 docx·xlsx·pptx를 생성하는 기능에서 API와 worker를 분리하고 `requestId` 기반 상태 수명주기를 만들었습니다. 구조 추론·포맷별 chunking·슬롯 단위 추론·규칙 기반 렌더링을 조합해 LLM의 역할을 제한하고, 비용·지연시간·누락률을 함께 관리했습니다. Polling·Callback은 같은 상태 저장소를 읽게 하고, 완료·실패·timeout·재시작 뒤에는 Cleanup Scheduler가 작업 자원을 회수하도록 했습니다.
+
+모델별 input/output token 단가를 설정값으로 분리하고 실제 사용량으로 호출 비용을 계산하는 cost guard를 구성했습니다. GPT-5.4-luna·GPT-5.4-terra를 같은 문서 golden dataset으로 비교하고, 파일 단위 입력 분할·cached input·단계 내 병렬 처리로 품질과 비용·지연시간을 함께 조정했습니다.
 
 ## 검색과 평가
 

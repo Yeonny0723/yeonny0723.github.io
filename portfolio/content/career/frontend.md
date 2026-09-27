@@ -16,11 +16,11 @@
 
 ### 판단과 구현
 
-Office.js 기반 Web Add-in으로 전환하고 React·TypeScript 모노레포에서 `mindsat`, `eco`, `m365`, `shared` 경계를 나눴습니다. `OfficeServiceProvider`와 client/service 계층으로 Office runtime 접근을 UI에서 분리했습니다. Node.js·Express 서버는 Microsoft Graph API 라우팅과 테넌트 컨텍스트에 집중시키고, 제품 API는 각 도메인에서 호출하도록 구성했습니다.
+Office.js 기반 Web Add-in으로 전환하고 React·TypeScript 모노레포에서 `mindsat`, `eco`, `m365`, `shared` 경계를 나눴습니다. `OfficeServiceProvider`와 client/service 계층으로 Office runtime 접근을 UI에서 분리했습니다. Node.js·Express 서버는 Microsoft Graph API 라우팅과 테넌트 컨텍스트에 집중시키고, 제품 API는 각 도메인에서 호출하도록 구성했습니다. 화면·M365 연동·고객사 설정을 한 단위로 묶지 않고 책임별로 나눈 것은 새로운 Outlook 대응과 고객사별 변경을 동시에 감당하기 위한 판단이었습니다.
 
 ### 결과와 검증
 
-제품 도메인과 M365 통합 계층을 분리하면서 여러 고객사의 제품 활성화·API URL·Azure AD·dev/prod manifest를 별도로 관리할 수 있게 했습니다. 서버의 책임을 좁혀 제품 API 변경이 전체 라우팅에 번지는 범위를 줄였습니다.
+제품 도메인과 M365 통합 계층을 분리하면서 여러 고객사의 제품 활성화·API URL·Azure AD·dev/prod manifest를 별도로 관리할 수 있게 했습니다. 서버의 책임을 좁혀 제품 API 변경이 전체 라우팅에 번지는 범위를 줄였습니다. 레거시를 전환할 때도 기존 사용자 흐름과 하위 호환 범위를 먼저 확인하고, 변경 가능한 단위부터 분리하는 방식을 택했습니다.
 
 ## 2. 보안 교육 제품의 사용자 흐름과 안전한 콘텐츠 처리
 
@@ -28,11 +28,11 @@ Mind-SAT에서 OTP/MFA 인증, 교육 플레이어, 퀴즈, 모바일 화면, �
 
 ## 3. 공통 디자인 시스템과 배포 기준
 
-여러 사내 시스템의 UI 패턴을 분석해 공통 UI 라이브러리와 디자인 시스템으로 정리했습니다. 컴포넌트·훅·아이콘·컬러 토큰을 구조화하고, Storybook·TypeDoc·생성 도구를 연결했습니다. Jenkins 기반으로 lint/typecheck·build·artifact·환경별 배포와 롤백 판단 기준을 표준화했습니다.
+여러 사내 시스템의 UI 패턴을 분석해 공통 UI 라이브러리와 디자인 시스템으로 정리했습니다. 컴포넌트·훅·아이콘·컬러 토큰을 구조화하고, Storybook·TypeDoc·생성 도구를 연결했습니다. 반복되는 화면과 설정을 자동화해 새로운 기능을 빠르게 적용할 수 있는 개발 단위를 만들고, Jenkins 기반으로 lint/typecheck·build·artifact·환경별 배포와 롤백 판단 기준을 표준화했습니다.
 
 ## 4. 성능·상태·E2E를 함께 다루기
 
-초기 로딩·대용량 렌더링 병목을 Code Splitting·Dynamic Import·Virtualization으로 분해하고, 검색·resize·동영상 이벤트에는 debounce/throttle을 적용했습니다. PFPlay에서는 WebSocket 상태와 UI 렌더링이 이어지는 다중 사용자 흐름을 Playwright BrowserContext·storageState로 반복 검증했습니다.
+초기 로딩·대용량 렌더링 병목을 Code Splitting·Dynamic Import·Virtualization으로 분해하고, 검색·resize·동영상 이벤트에는 debounce/throttle을 적용했습니다. PFPlay에서는 WebSocket 상태와 UI 렌더링이 이어지는 다중 사용자 흐름을 Playwright BrowserContext·storageState로 반복 검증했습니다. 복잡한 상태를 화면별 임시 처리로 남기지 않고 도메인·기능 단위로 나누어, 변경 시 영향을 추적하고 실패 흐름을 재현할 수 있게 하는 것을 중요하게 봅니다.
 
 ## 5. 프론트엔드 개발 환경의 공급망 보안
 

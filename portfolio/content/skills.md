@@ -18,10 +18,16 @@ skills:
   - WebSocket
 ---
 
-**AI 제품** LLM Application · 문서 생성 · RAG 품질 평가 · Prompt Context · 비용·지연시간 제어
+**Frontend** React · TypeScript · Next.js · State Management · Design System · Monorepo · Virtualization · Code Splitting · Accessibility
 
-**제품 엔지니어링** React · TypeScript · Node.js · API 연동 · 멀티테넌트 · 디자인 시스템 · E2E
+**Frontend Quality** Playwright · E2E Testing · Responsive UI · Form Validation · WebSocket · Debounce/Throttle · Storybook · TypeDoc
 
-**운영과 보안** 인증·권한 · Zero Trust · 콘텐츠 Sanitizing · CI/CD · 고가용성 인프라 · 공급망 가드레일
+**Backend & Domain** Python · Node.js · ASP.NET Core · MSSQL · REST API · Legacy Migration · Backward Compatibility · Transactions · Concurrency
 
-**언어** ITT 비즈니스 영어-한국어 통번역 자격증
+**AI Product** OpenAI SDK · LangChain · LLM Application · RAG · Text2SQL · Prompt Context · Golden Dataset · Model Comparison · Cost Guard
+
+**Async & Operations** Queue/Worker · Polling · Callback · Retry/Timeout · Cleanup Scheduler · OCI · Instance Pool · Private Load Balancer · CI/CD
+
+**Security** Authentication · Authorization · Multi-tenancy · Zero Trust · CSP · DOM Sanitizing · Prompt Injection Awareness · Supply-chain Guardrails
+
+**Collaboration** 기술 표준화 · 문서화 · 코드 리뷰 · 지식 공유 · ITT 비즈니스 영어-한국어 통번역 자격증
