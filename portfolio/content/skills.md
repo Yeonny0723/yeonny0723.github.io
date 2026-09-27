@@ -14,6 +14,7 @@ skills:
   - OpenAI SDK
   - LangChain
   - MCP
+  - OCI
   - RAG
   - Text2SQL
   - Playwright
@@ -27,6 +28,6 @@ skills:
 
 **Backend Stack** Python · Node.js · Express · ASP.NET Core · MSSQL
 
-**AI SDK & Tooling** OpenAI SDK · LangChain · MCP
+**AI SDK & Tooling** OpenAI SDK · LangChain · MCP · OCI
 
 **Delivery Tools** Jenkins · GitLab CI/CD

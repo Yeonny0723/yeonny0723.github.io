@@ -12,7 +12,7 @@
 
 ## Core Skills
 
-**AI SDK & Tooling** OpenAI SDK · LangChain · MCP
+**AI SDK & Tooling** OpenAI SDK · LangChain · MCP · OCI
 
 **Backend Stack** Python · Node.js · Express · ASP.NET Core · MSSQL
 
