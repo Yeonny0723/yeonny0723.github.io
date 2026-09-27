@@ -83,7 +83,7 @@ Run this source-title checklist after writing the file:
 
 ```bash
 source_count=\$(find 소스/experiences -maxdepth 1 -type f -name '*.md' ! -name README.md | wc -l)
-timeline_count=\$(rg -c '^### ' portfolio/content/timeline.md)
+timeline_count=\$(rg -c '^### ' portfolio/content/timeline.md | awk -F: '{print \$NF}')
 test "\$source_count" -eq 25
 test "\$timeline_count" -eq 25
 ```
