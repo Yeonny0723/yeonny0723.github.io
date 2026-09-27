@@ -12,13 +12,13 @@
 
 ## Core Skills
 
-**AI SDK & Tooling** OpenAI SDK · LangChain · MCP · OCI
+**AI SDK & Tooling** OpenAI SDK · LangChain · Hugging Face Transformers · MCP · OCI · Pandas · NumPy
 
-**Backend Stack** Python · Node.js · Express · ASP.NET Core · MSSQL
+**Backend Stack** Python · FastAPI · Node.js · Express · ASP.NET Core · MSSQL
 
 **Frontend & Quality** React · TypeScript · Next.js · Playwright · Storybook
 
-**Delivery** Jenkins · GitLab CI/CD
+**Delivery** Docker · Jenkins · GitLab CI/CD
 
 ## Work Experience
 
