@@ -13,14 +13,14 @@
 
 **Fasoo**
 
-### Wrapsody
+### Wrapsody 3.1 · 3.2
 
 문서를 암호화하고 안전하게 공유하는 문서보안 솔루션입니다.
 
-- **Agentic 문서 생성** — 사용자의 재진입과 리뷰 범위 축소를 고려해 필요한 추론 단계만 선택하는 멀티턴 문서 생성 기능 개발 · Python · OpenAI SDK · LangChain · Agentic Workflow
-- **AI 검색·RAG·Text2SQL 평가** — 동의어·다의어 질의의 검색 품질을 비교할 수 있도록 Golden Dataset과 단계별 LLM 평가 자동화 개발 · Python · RAG · Text2SQL · Playwright
+- **3.1 · AI 검색·RAG·Text2SQL 평가** — 동의어·다의어 질의의 검색 품질을 비교할 수 있도록 Golden Dataset과 단계별 LLM 평가 자동화 개발 · Python · RAG · Text2SQL · Playwright
+- **3.2 · Agentic 문서 생성** — 사용자의 재진입과 리뷰 범위 축소를 고려해 필요한 추론 단계만 선택하는 멀티턴 문서 생성 기능 개발 · Python · OpenAI SDK · LangChain · Agentic Workflow
 
-### Mind-SAT
+### Mind-SAT 2.5 · 2.6 · 2.7
 
 메일 피싱 훈련과 보안교육을 제공하는 서비스입니다.
 
@@ -44,14 +44,14 @@
 
 **Fasoo**
 
-### Wrapsody eCo
+### Wrapsody eCo 2.7
 
 보안 문서를 Outlook에서 공유·열람·협업할 수 있게 하는 M365 Web Add-in 플랫폼입니다.
 
 - **M365 멀티테넌트 플랫폼** — 레거시 Outlook 클라이언트를 고객사별 설정과 제품 경계가 분리된 Web Add-in으로 전환 · React · TypeScript · Office.js · Microsoft Graph API
 - **보안 문서 협업 기능** — 메일 작성·문서 첨부·수신 메일 처리 흐름과 고객사별 호환성·다국어 기능 개발 · React · Office.js · Node.js
 
-### Mind-SAT
+### Mind-SAT 2.3 · 2.4
 
 메일 피싱 훈련부터 보안교육 이수와 관리자 통계까지 제공하는 서비스입니다.
 
