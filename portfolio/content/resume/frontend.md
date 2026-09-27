@@ -12,13 +12,15 @@
 
 ## Core Skills
 
-**Frontend** React · Next.js · TypeScript · TanStack Query · Redux Toolkit · Vite · Webpack · Storybook · Design System
+**Frontend** React · TypeScript · Next.js · TanStack Query · Redux Toolkit · Vite · Webpack · Storybook · TypeDoc
 
-**UX & Quality** State Management · Form Validation · Responsive UI · Accessibility · WebSocket · Playwright · Virtualization · Code Splitting
+**Frontend Quality** Playwright · WebSocket · Virtualization · Code Splitting · Dynamic Import · Design Tokens · Accessibility
 
-**Integration & Platform** Node.js · Express · REST API · Microsoft Graph API · Office.js · OAuth PKCE · GitLab CI/CD · Jenkins · Vercel
+**Backend & Integration** Node.js · Express · REST API · ASP.NET Core · MSSQL · Microsoft Graph API · Office.js · Vercel
 
-**Security & AI Product** CSP · DOM Sanitizing · OpenAI SDK · LangChain · MCP · LLM Feature Integration
+**Platform & Security** GitLab CI/CD · Jenkins · OAuth 2.0 · OAuth PKCE · CSP · Content Sanitization
+
+**AI Product Integration** OpenAI SDK · LangChain · MCP · LLM Application
 
 ## Work Experience
 

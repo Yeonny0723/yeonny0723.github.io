@@ -12,11 +12,13 @@
 
 ## Core Skills
 
-**AI Application** OpenAI SDK · LangChain · Agentic Workflow · Multi-turn Orchestration · RAG · Text2SQL · Golden Dataset · Evaluation Automation
+**AI Application** Python · OpenAI SDK · LangChain · MCP · LLM Application · Agentic Workflow · RAG · Text2SQL · LLM Evaluation
 
-**Backend & Operations** Python · Node.js · MSSQL · Async Processing · Queue/Worker · OCI · Instance Pool · Private Load Balancer · CI/CD
+**Backend & Operations** Node.js · Express · ASP.NET Core · MSSQL · REST API · Python Concurrency · OCI · Load Balancing · Jenkins · GitLab CI/CD
 
-**Product Engineering** React · TypeScript · Microsoft Graph API · Office.js · Playwright · MCP · Security Guardrails
+**Product Engineering** React · TypeScript · Next.js · Microsoft Graph API · Office.js · Playwright · Storybook
+
+**Security** OAuth 2.0 · OAuth PKCE · CSP · Content Sanitization · npm Audit · Dependency Security
 
 ## Work Experience
 
