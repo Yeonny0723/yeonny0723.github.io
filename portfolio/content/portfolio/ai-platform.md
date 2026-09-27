@@ -12,7 +12,7 @@ Wrapsody AI 문서 검색 품질에서는 36개 golden dataset을 기준으로 e
 
 ## 서비스 운영
 
-Mind-SAT AI Python 백엔드에 OpenAI SDK·LangChain 기반 메일 템플릿 추천·생성을 연결했습니다. 단일 AI 서버의 장애 위험은 OCI Instance Pool과 Private Load Balancer로 줄이고, 실제 인스턴스 중지 테스트로 복구 동작을 확인했습니다.
+Mind-SAT AI Python 백엔드에 OpenAI SDK·LangChain 기반 메일 템플릿 추천·생성과 보안 퀴즈 생성 기능을 연결했습니다. 단일 AI 서버의 장애 위험은 OCI Instance Pool과 Private Load Balancer로 줄이고, 실제 인스턴스 중지 테스트로 복구 동작을 확인했습니다.
 
 ## 제가 중요하게 생각하는 기준
 
