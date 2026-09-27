@@ -1,16 +1,14 @@
 .button {
-  min-height: 2.35rem;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid var(--fg);
-  border-radius: 999px;
-  background: var(--fg);
-  color: var(--bg);
+  padding: 0.25rem 0.55rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg-muted);
   cursor: pointer;
   font: inherit;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.05em;
+  font-size: 0.82rem;
 }
 
-.button:hover { background: var(--accent); border-color: var(--accent); }
+.button:hover { background: var(--accent-soft); color: var(--accent); }
+
 @media print { .button { display: none; } }

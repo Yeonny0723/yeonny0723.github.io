@@ -1,8 +1,20 @@
 @use './tokens';
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; scroll-padding-top: 2rem; }
+html {
+  scroll-behavior: auto;
+  --anchor-offset: 5rem;
+  scroll-padding-top: var(--anchor-offset);
+}
+
+@media (min-width: 1100px) {
+  html { --anchor-offset: 0px; }
+}
 
 body {
   margin: 0;
@@ -16,11 +28,17 @@ body {
   overflow-wrap: anywhere;
 }
 
-a { color: var(--accent); text-underline-offset: 3px; }
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
 
-h1, h2, h3, h4, h5, h6 { line-height: 1.3; word-break: keep-all; }
-
-button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
 
 .skip-link {
   position: absolute;
@@ -30,32 +48,27 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
   padding: 0.75rem 1rem;
   background: var(--accent);
   color: #fff;
+  border-radius: 0 0 var(--radius) 0;
+
+  &:focus { left: 0; }
 }
 
-.skip-link:focus { left: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .prose {
   > :first-child { margin-top: 0; }
   > :last-child { margin-bottom: 0; }
   p { margin: 0 0 1rem; }
-  ul, ol { margin: 0 0 1.1rem; padding-left: 1.2rem; }
-  li { margin-bottom: 0.4rem; color: var(--fg-muted); }
-  li::marker { color: var(--accent); }
-  strong { color: var(--accent-strong); font-weight: 700; }
+  h4, h5, h6 { margin: 1.75rem 0 0.5rem; font-size: 1rem; font-weight: 600; }
+  ul, ol { margin: 0 0 1rem; padding-left: 1.15rem; }
+  li { margin-bottom: 0.35rem; color: var(--fg-muted); }
+  li::marker { color: var(--fg-faint); }
+  strong { color: var(--fg); font-weight: 600; }
   code { padding: 0.1em 0.35em; background: var(--bg-subtle); border-radius: 4px; font-family: var(--font-mono); font-size: 0.9em; }
-  blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 3px solid var(--accent); color: var(--fg-muted); }
+  pre { overflow-x: auto; padding: 1rem; background: var(--bg-subtle); border-radius: var(--radius); }
+  blockquote { margin: 0 0 1rem; padding-left: 1rem; border-left: 3px solid var(--border-strong); color: var(--fg-muted); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-}
-
-@media print {
-  @page { size: A4; margin: 14mm 15mm; }
-  body { background: #fff; color: #111; font-size: 10.5pt; line-height: 1.55; }
-  .screen-only, .skip-link { display: none !important; }
-  #document-content { display: block !important; max-width: none; }
-  a { color: inherit; text-decoration: none; }
-  h2, h3 { break-after: avoid; }
-  article, section { break-inside: avoid; }
-}
+.prose details { margin-top: 1rem; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+.prose summary { cursor: pointer; color: var(--fg); }
+.prose details[open] summary { margin-bottom: 0.75rem; }
