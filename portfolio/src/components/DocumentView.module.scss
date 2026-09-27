@@ -1,0 +1,38 @@
+.document {
+  padding: 2.75rem 0 5rem;
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.6rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--fg);
+}
+
+.header h2 { margin: 0; font-size: clamp(1.65rem, 4vw, 2.45rem); letter-spacing: -0.06em; }
+.eyebrow { margin: 0 0 0.5rem; color: var(--accent); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; }
+.marker { margin: 0; color: var(--fg-faint); font-family: var(--font-mono); font-size: 0.62rem; text-align: right; }
+
+.body { max-width: 48rem; }
+.body h1 { display: none; }
+.body h2 { margin: 2.8rem 0 0.9rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 1.35rem; }
+.body h3 { margin: 1.75rem 0 0.55rem; color: var(--accent); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.body p { max-width: 45rem; }
+.body ul { padding-left: 1.15rem; }
+.body li { margin-bottom: 0.5rem; }
+.body blockquote { border-left-color: var(--accent); }
+.body strong { color: var(--accent-strong); }
+
+@media (max-width: 720px) {
+  .header { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+  .marker { text-align: left; }
+}
+
+@media print {
+  .document { padding: 0; }
+  .header { margin-bottom: 1.5rem; }
+  .marker { display: none; }
+}
