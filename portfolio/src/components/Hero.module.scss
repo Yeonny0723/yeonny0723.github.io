@@ -1,5 +1,12 @@
 .hero { padding: 3.5rem 0 2.5rem; }
 
+.heroTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
 .name {
   display: flex;
   align-items: baseline;
@@ -29,4 +36,8 @@
   font-size: 0.9rem;
 
   a { color: var(--accent); }
+}
+
+@media (max-width: 480px) {
+  .heroTop { align-items: stretch; flex-direction: column; gap: 1rem; }
 }
