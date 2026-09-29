@@ -30,6 +30,12 @@ Wrapsody eCo는 암호화된 문서를 웹·클라이언트·Outlook Add-in·모
 
 ### TypeScript 기반 제품·플랫폼 개발 | Fasoo | 2024~2025
 
-- **역할·기술:** React·TypeScript, Node.js·Express, ASP.NET Core, MSSQL을 사용해 M365 Web Add-in 플랫폼과 사내 업무 시스템을 개발했습니다.
+- **역할·기술:** React·TypeScript와 Node.js·Express를 사용해 여러 제품이 공통으로 사용하는 M365 Web Add-in 플랫폼을 개발했습니다.
 - Mind-SAT 메일 신고와 Wrapsody eCo 문서 공유 앱을 제품 모듈로 분리하고, Outlook 초기화·메일 컨텍스트·Graph API 프록시·고객사별 암호화 설정을 공통화했습니다.
 - **성과:** Mind-SAT에서 만든 공통 M365·Graph 연동 모듈을 Wrapsody eCo에 재사용해 추가 앱 개발 기간을 기존 대비 절반으로 줄였습니다. 고객사마다 별도 Add-in 서버를 두지 않고 하나의 멀티테넌트 프록시로 여러 제품을 지원했으며, eCo Add-in을 24개 고객사·273명 운영 환경에 제공했습니다.
+
+### 사내 업무 시스템·ERP 데이터 연동 | Fasoo | 2024
+
+- **역할·기술:** Fullstack Engineer로 인사 관리·품의/결재·고객 관리 시스템을 ASP.NET WebForms에서 React·C#·ASP.NET Core·MSSQL 기반 구조로 마이그레이션했습니다.
+- 업무 단위 백엔드 API를 개발하고, 복잡한 조회는 인덱스·DB view·임시 테이블·페이지 단위 조회로 정리했습니다. 인사·재무 ERP를 원천 데이터로 두고 변경분을 주기적으로 반영하는 MSSQL 스케줄러도 개발했습니다.
+- **성과:** 화면·API·데이터 처리 책임을 분리해 레거시 시스템의 변경 범위를 줄였습니다. 수동 쿼리로 처리하던 ERP 기준 데이터 반영을 재실행 가능한 스케줄러 작업으로 전환하고, 변경분 insert/update와 검증 쿼리를 통해 반복 작업과 반영 누락 가능성을 낮췄습니다.
