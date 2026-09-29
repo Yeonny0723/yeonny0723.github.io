@@ -299,9 +299,15 @@ Error generating stack: `+e.message+`
 </ul>
 <h5>TypeScript 기반 제품·플랫폼 개발 | Fasoo | 2024~2025</h5>
 <ul>
-<li><strong>역할·기술:</strong> React·TypeScript, Node.js·Express, ASP.NET Core, MSSQL을 사용해 M365 Web Add-in 플랫폼과 사내 업무 시스템을 개발했습니다.</li>
+<li><strong>역할·기술:</strong> React·TypeScript와 Node.js·Express를 사용해 여러 제품이 공통으로 사용하는 M365 Web Add-in 플랫폼을 개발했습니다.</li>
 <li>Mind-SAT 메일 신고와 Wrapsody eCo 문서 공유 앱을 제품 모듈로 분리하고, Outlook 초기화·메일 컨텍스트·Graph API 프록시·고객사별 암호화 설정을 공통화했습니다.</li>
 <li><strong>성과:</strong> Mind-SAT에서 만든 공통 M365·Graph 연동 모듈을 Wrapsody eCo에 재사용해 추가 앱 개발 기간을 기존 대비 절반으로 줄였습니다. 고객사마다 별도 Add-in 서버를 두지 않고 하나의 멀티테넌트 프록시로 여러 제품을 지원했으며, eCo Add-in을 24개 고객사·273명 운영 환경에 제공했습니다.</li>
+</ul>
+<h5>사내 업무 시스템·ERP 데이터 연동 | Fasoo | 2024</h5>
+<ul>
+<li><strong>역할·기술:</strong> Fullstack Engineer로 인사 관리·품의/결재·고객 관리 시스템을 ASP.NET WebForms에서 React·C#·ASP.NET Core·MSSQL 기반 구조로 마이그레이션했습니다.</li>
+<li>업무 단위 백엔드 API를 개발하고, 복잡한 조회는 인덱스·DB view·임시 테이블·페이지 단위 조회로 정리했습니다. 인사·재무 ERP를 원천 데이터로 두고 변경분을 주기적으로 반영하는 MSSQL 스케줄러도 개발했습니다.</li>
+<li><strong>성과:</strong> 화면·API·데이터 처리 책임을 분리해 레거시 시스템의 변경 범위를 줄였습니다. 수동 쿼리로 처리하던 ERP 기준 데이터 반영을 재실행 가능한 스케줄러 작업으로 전환하고, 변경분 insert/update와 검증 쿼리를 통해 반복 작업과 반영 누락 가능성을 낮췄습니다.</li>
 </ul>
 `},de={slug:`frontend`,meta:{},bodyHtml:`<h3>프론트엔드 엔지니어 경력기술서</h3>
 <p>Fasoo에서 권한과 보안 요구가 높은 기업용 제품의 화면과 개발 기반을 만들었습니다. Wrapsody는 기업 문서를 암호화하고 문서별 권한과 버전을 관리하는 서비스입니다. 사내 운영 환경에만 약 100만 건의 문서가 축적돼 있으며, 약 10여 고객사에 클라우드·온프레미스 형태로 제공하고 있습니다. 고객사별 서버 환경과 복잡한 문서 접근 권한, 문서 암·복호화와 종단 간 암호화를 고려해야 하는 제품입니다.</p>
@@ -331,11 +337,11 @@ Error generating stack: `+e.message+`
 <li>대량 신고 이력에는 가상화, 초기 로딩에는 코드 분할을 적용했습니다. 피싱 훈련·퀴즈·라이선스·권한별 접근을 외부 메일과 백엔드 연동까지 검증했습니다.</li>
 <li><strong>성과:</strong> 핵심 운영 시나리오 4종의 수동 검증 시간을 약 30분에서 E2E 약 8분으로 줄이고, 배포 버전과 산출물을 Jenkins 작업에서 추적할 수 있게 했습니다.</li>
 </ul>
-<h5>React 풀스택 전환 | Fasoo · 사내 업무 시스템 | 2024</h5>
+<h5>사내 업무 시스템·ERP 데이터 연동 | Fasoo | 2024</h5>
 <ul>
-<li><strong>역할·기술:</strong> 인사·결재·고객 관리 시스템의 화면과 API를 React·TypeScript, ASP.NET Core, MSSQL 기반으로 개발했습니다.</li>
-<li>기존 WebForms 업무 흐름과 사용자 설문을 반영해 화면·API를 재구성하고, 목록 조회와 데이터 동기화 흐름을 정리했습니다.</li>
-<li><strong>성과:</strong> 사내 업무 시스템을 신규 웹 구조로 전환하고, 공통 UI와 GitLab CI/CD를 적용해 반복 개발·수동 배포 작업을 줄였습니다.</li>
+<li><strong>역할·기술:</strong> Fullstack Engineer로 인사 관리·품의/결재·고객 관리 시스템을 ASP.NET WebForms에서 React·TypeScript, C#·ASP.NET Core·MSSQL 기반 구조로 마이그레이션했습니다.</li>
+<li>사용자 설문과 기존 업무 흐름을 바탕으로 화면과 백엔드 API를 다시 구성하고, MSSQL 인덱스·DB view·임시 테이블·페이지 단위 조회로 목록과 집계 쿼리를 개선했습니다. 인사·재무 ERP 데이터를 주기적으로 반영하는 MSSQL 스케줄러도 개발했습니다.</li>
+<li><strong>성과:</strong> 화면·API·데이터 처리 책임을 분리해 레거시 시스템의 변경 범위를 줄였습니다. 수동 쿼리로 처리하던 ERP 기준 데이터 반영을 재실행 가능한 스케줄러 작업으로 전환하고, 변경분 insert/update와 검증 쿼리를 통해 반복 작업과 반영 누락 가능성을 낮췄습니다.</li>
 </ul>
 `},fe={slug:`ai-platform`,meta:{},bodyHtml:`<h3>Wrapsody AI 템플릿 문서 생성 Agent</h3>
 <p>Wrapsody AI에서 템플릿 문서와 여러 원천 파일을 입력받아 보고서·신청서·검토서·제안서 형태의 새 DOCX·PPTX·XLSX를 만드는 기능입니다. 메인 개발자로 문서 생성 파이프라인과 사용자 검토 흐름, 장기 작업 처리 구조, 품질 평가 체계를 설계하고 구현했습니다.</p>
