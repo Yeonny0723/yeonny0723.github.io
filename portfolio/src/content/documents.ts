@@ -3,12 +3,10 @@ import resumeAiDoc from '/content/resume/ai.md';
 import resumeFrontendDoc from '/content/resume/frontend.md';
 import careerAiDoc from '/content/career/ai.md';
 import careerFrontendDoc from '/content/career/frontend.md';
-import productPhilosophyDoc from '/content/portfolio/product-philosophy.md';
-import securityDomainDoc from '/content/portfolio/security-domain.md';
 import aiPlatformDoc from '/content/portfolio/ai-platform.md';
+import mindsatAiDoc from '/content/portfolio/mindsat-ai.md';
+import designSystemMcpDoc from '/content/portfolio/design-system-mcp.md';
 import frontendPlatformDoc from '/content/portfolio/frontend-platform.md';
-import engineeringSecurityDoc from '/content/portfolio/engineering-security.md';
-import pfplayDoc from '/content/portfolio/pfplay.md';
 
 import type { CareerDocument, Doc, DocumentKind, Position, ViewState } from '../types';
 
@@ -26,12 +24,26 @@ function html(...docs: RawDocument[]) {
 
 const portfolioBodyHtml = html(
   positioning,
-  productPhilosophyDoc as unknown as RawDocument,
-  securityDomainDoc as unknown as RawDocument,
   aiPlatformDoc as unknown as RawDocument,
+  mindsatAiDoc as unknown as RawDocument,
+  designSystemMcpDoc as unknown as RawDocument,
   frontendPlatformDoc as unknown as RawDocument,
-  engineeringSecurityDoc as unknown as RawDocument,
-  pfplayDoc as unknown as RawDocument,
+);
+
+const portfolioAiBodyHtml = html(
+  positioning,
+  aiPlatformDoc as unknown as RawDocument,
+  mindsatAiDoc as unknown as RawDocument,
+  designSystemMcpDoc as unknown as RawDocument,
+  frontendPlatformDoc as unknown as RawDocument,
+);
+
+const portfolioFrontendBodyHtml = html(
+  positioning,
+  designSystemMcpDoc as unknown as RawDocument,
+  frontendPlatformDoc as unknown as RawDocument,
+  aiPlatformDoc as unknown as RawDocument,
+  mindsatAiDoc as unknown as RawDocument,
 );
 
 export const DEFAULT_VIEW: ViewState = { kind: 'portfolio' };
@@ -42,6 +54,8 @@ export const DOCUMENTS: CareerDocument[] = [
   { kind: 'career', position: 'ai', label: 'AI 경력기술서', title: 'AI Engineer Career Description', slug: 'career-ai', bodyHtml: careerAi.bodyHtml },
   { kind: 'career', position: 'frontend', label: 'Frontend 경력기술서', title: 'Frontend Engineer Career Description', slug: 'career-frontend', bodyHtml: careerFrontend.bodyHtml },
   { kind: 'portfolio', label: 'Portfolio', title: 'Product Engineering Portfolio', slug: 'portfolio', bodyHtml: portfolioBodyHtml },
+  { kind: 'portfolio', position: 'ai', label: 'AI Engineer 포트폴리오', title: 'AI Engineer Portfolio', slug: 'portfolio-ai', bodyHtml: portfolioAiBodyHtml },
+  { kind: 'portfolio', position: 'frontend', label: 'Frontend Engineer 포트폴리오', title: 'Frontend Engineer Portfolio', slug: 'portfolio-frontend', bodyHtml: portfolioFrontendBodyHtml },
 ];
 
 export const DOCUMENT_TABS = [
