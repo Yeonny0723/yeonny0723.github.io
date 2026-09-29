@@ -338,44 +338,111 @@ Error generating stack: `+e.message+`
 <li><strong>성과:</strong> 사내 업무 시스템을 신규 웹 구조로 전환하고, 공통 UI와 GitLab CI/CD를 적용해 반복 개발·수동 배포 작업을 줄였습니다.</li>
 </ul>
 `},fe={slug:`ai-platform`,meta:{},bodyHtml:`<h3>Wrapsody AI 템플릿 문서 생성 Agent</h3>
-<h4>문제 상황</h4>
-<p>보고서와 제안서는 양식이 같아도 회차마다 옮겨 적을 자료가 달랐습니다. 템플릿 한 개와 여러 원천 DOCX·PPTX·XLSX 파일을 받아 새 문서를 만들려면 문단·슬라이드·시트의 구조를 해석하고, 합계·반복 같은 연산도 처리해야 했습니다. 긴 문서를 한 번에 추론할 때는 LLM이 뒤쪽 슬롯을 건너뛰었고, 결과가 비어 있어도 원천 자료 부족인지 생성 실패인지 알기 어려웠습니다. 생성에 5~10분이 걸리는 작업을 한 API 요청에 묶으면 화면 이탈과 타임아웃에도 취약했습니다.</p>
-<h4>선택한 접근과 이유</h4>
-<p>메인 개발자로서 템플릿을 단순 치환하거나 LLM이 문서 조작 코드를 직접 작성하게 하는 방식 대신, 문서 구조 추론과 슬롯 추론을 분리했습니다. Agent가 입력에 따라 필요한 단계를 고르는 동적 파이프라인을 구성하고, 실제 파일 변경은 직접 정의한 문법과 20여 개 연산자만 실행하도록 제한했습니다. 규칙으로 처리할 수 있는 파싱·청킹·렌더링에는 LLM을 호출하지 않아 비용과 실행 위험을 줄였습니다.</p>
-<p>처음의 단일턴 생성 요구에는 결과 파일만으로 끝내지 말고 멀티턴 수정과 리뷰 포인트 축소를 더하자고 제안했습니다. 사용자가 전체 문서를 다시 읽는 대신 확인할 위치와 이유를 알 수 있어야 반복 작업이 줄어든다고 봤습니다. 그래서 원천 근거가 없는 누락, 문법·렌더링 실패, 추론을 다시 해야 하는 자리를 서로 다른 상태로 취급하고, 특정 셀·문단만 <code>ContentPatch</code>로 재처리하는 경로를 설계했습니다.</p>
-<h4>구현과 검증</h4>
-<p>API는 <code>requestId</code>를 먼저 돌려주고 <code>BackgroundTask</code>로 작업을 등록합니다. MySQL에 요청 상태와 결과를 남기고, 전용 thread pool에서 긴 문서 생성을 실행해 조회·재진입·실패 추적이 가능하게 했습니다. Agent는 템플릿과 원천 파일을 분석한 뒤 구조 추론, 교체 영역 파악, 슬롯 추론, 연산 지시서 생성 가운데 필요한 단계만 선택합니다. DOCX는 문단, PPTX는 슬라이드, XLSX는 시트 구조를 공통 Spec으로 옮기고 포맷별 Writer가 렌더링합니다.</p>
-<p>긴 문서에서 뒤쪽 슬롯이 빠지는 현상을 재현한 뒤 포맷별 청킹과 슬롯 묶음 크기를 조정했습니다. Golden Dataset으로 모델·프롬프트·청킹 조합을 비교하고, 실제 입출력 토큰으로 비용을 계산했습니다. 결과에는 <code>warnings</code>, <code>dropped</code>, <code>unfilledSlots</code>와 위치·사유를 남겨 입력 자료 부족, 렌더링 오류, 재추론 대상을 구분했습니다. 내부 검증에서 약 200개 슬롯 중 검토가 필요한 약 20개를 표시했습니다.</p>
-<h4>결과</h4>
-<p>내부 비교에서 문서 한 건의 생성 시간은 4<del>5분에서 1</del>2분, 평균 LLM 비용은 약 350원에서 100원, 채워야 할 슬롯의 누락률은 약 20%에서 2% 수준으로 줄었습니다. 기능 구현을 마쳤고 현재 내부 검증·QA 단계입니다. 멀티턴 부분 수정은 설계한 경로이며, 사용자 리뷰 시간 자체의 개선 수치는 아직 측정하지 않았습니다.</p>
+<p>Wrapsody AI에서 템플릿 문서와 여러 원천 파일을 입력받아 보고서·신청서·검토서·제안서 형태의 새 DOCX·PPTX·XLSX를 만드는 기능입니다. 메인 개발자로 문서 생성 파이프라인과 사용자 검토 흐름, 장기 작업 처리 구조, 품질 평가 체계를 설계하고 구현했습니다.</p>
+<h4>1. 단일턴 초안 생성에서 멀티턴 검토로</h4>
+<h5>문제</h5>
+<p>초기 기획은 사용자가 요청하면 완성된 초안을 한 번 생성하는 단일턴 방식이었습니다. 그러나 문서 생성은 한 번의 질문으로 끝나는 작업이 아닙니다. 만족할 만한 결과를 얻으려면 생성된 문서를 검토하고, 잘못 채워졌거나 비어 있는 부분만 다시 요청할 수 있어야 했습니다. 생성에 실패한 위치를 알려주지 않으면 사용자는 문서 전체를 다시 확인해야 했습니다.</p>
+<h5>접근</h5>
+<p>멀티턴 수정을 지원하고 사용자 리뷰 범위를 줄이는 것을 제품 품질의 핵심으로 봤습니다. 단순히 결과 파일을 반환하는 대신, 채워지지 않은 영역과 생성에 실패한 영역을 응답에 함께 제공하자고 제안했습니다. 수정 요청도 모두 같은 파이프라인으로 다시 처리하지 않고 요청의 성격에 따라 필요한 단계만 실행하도록 설계했습니다.</p>
+<h5>실행</h5>
+<p>문서에서 채워지지 않은 영역과 LLM이 잘못된 연산자를 생성해 렌더링에서 제외된 영역을 구분하고, 위치와 실패 사유를 응답 스키마에 추가했습니다. 수정 요청이 들어오면 Agent가 연산자만 바꿀 요청인지, 문서 구조를 다시 추론해야 하는지, 교체할 영역을 다시 찾아야 하는지 판단합니다. 판단 결과에 따라 필요한 단계만 선택해 실행하도록 워크플로를 구성했습니다.</p>
+<h5>결과</h5>
+<p>사용자가 문서 전체를 다시 읽지 않고 확인이 필요한 위치와 실패 이유를 먼저 볼 수 있게 했습니다. 단일턴 초안 생성 기능을 부분 수정과 재추론이 가능한 멀티턴 문서 생성 흐름으로 확장했습니다.</p>
+<h4>2. 5~10분이 걸리는 순차 작업을 백그라운드로 분리</h4>
+<h5>문제</h5>
+<p>문서 생성은 구조 추론, 교체 영역 추론, 교체 방식 추론, 연산 모음 JSON 생성, 렌더링 순서로 진행됩니다. 앞 단계의 결과가 다음 단계의 입력이 되므로 순서를 지켜야 했고, 테스트에서는 한 요청이 약 5~10분 동안 실행됐습니다. 기존 API처럼 요청이 끝날 때까지 연결을 유지하면 사용자가 화면을 벗어나기 어렵고, 긴 작업이 기존 서비스 요청 처리에도 영향을 줄 수 있었습니다.</p>
+<h5>접근</h5>
+<p>사용자가 생성 중에 다른 화면으로 이동해도 작업은 계속되고, 나중에 상태와 결과를 다시 확인할 수 있어야 한다고 판단했습니다. 문서 생성 작업을 기존 API 실행 흐름과 분리하고 별도 실행 자원에서 처리하기로 했습니다.</p>
+<h5>실행</h5>
+<p>API는 작업을 <code>BackgroundTask</code>로 등록하고, MySQL에서 세션과 진행 상태를 관리하도록 구성했습니다. 문서 생성 전용 thread pool을 두어 긴 순차 작업이 기존 API의 이벤트 루프를 점유하지 않게 했습니다. 사용자는 요청 이후 화면을 벗어날 수 있고, 다시 진입해 진행 상태와 결과를 확인할 수 있습니다.</p>
+<h5>결과</h5>
+<p>5~10분이 걸리는 생성 작업의 수명주기를 일반 API 요청과 분리했습니다. 긴 문서 생성 중에도 기존 서비스 요청을 처리할 수 있고, 사용자는 생성 화면에 머무르지 않아도 작업 결과를 이어서 확인할 수 있게 됐습니다.</p>
+<h4>3. 모델과 파이프라인이 바뀌어도 비교할 수 있는 평가 기준 마련</h4>
+<h5>문제</h5>
+<p>입력 문서의 형식과 수정 요청을 미리 한정하기 어려웠고, 개발 도중 사용 모델도 GPT-4에서 GPT-5.6, GPT-6으로 바뀌었습니다. 모델뿐 아니라 프롬프트와 파이프라인도 계속 변경되는 상황에서 특정 예시가 잘 동작하는지만 확인해서는 결과 품질이 유지되는지 판단하기 어려웠습니다.</p>
+<h5>접근</h5>
+<p>모델에 종속된 처리 흐름을 만들기보다 입력과 변경을 수용할 수 있는 구조를 설계했습니다. 같은 입력으로 모델·프롬프트·파이프라인 변경 전후를 반복 비교할 수 있는 평가 기준도 함께 마련했습니다.</p>
+<h5>실행</h5>
+<p>대표 문서와 기대 결과를 Golden Dataset으로 만들고, 모델·프롬프트·파이프라인 조합을 같은 조건에서 평가하도록 구성했습니다. 문서 구조 추론과 교체 영역 추론 등 각 단계를 분리해 특정 단계만 바뀌어도 결과를 비교할 수 있게 했습니다.</p>
+<h5>결과</h5>
+<p>모델이나 프롬프트가 변경될 때마다 감으로 품질을 판단하지 않고 같은 데이터와 기준으로 회귀 여부를 확인할 수 있게 됐습니다. 입력과 모델이 달라져도 문서 생성 품질을 지속해서 점검할 수 있는 기반을 만들었습니다.</p>
 `},pe={slug:`mindsat-ai`,meta:{},bodyHtml:`<h3>Mind-SAT AI 콘텐츠 생성</h3>
-<h4>문제 상황</h4>
-<p>보안 훈련 메일과 퀴즈를 고객 상황에 맞게 생성해야 했습니다. 산업군·부서·직급·기술 이해도·위협 수준에 따라 문구가 달라져야 했고, 첨부파일과 이미지 등 멀티모달 입력도 들어왔습니다. 1CPU·4GB 단일 AI 서버에서는 첨부 처리와 동시 요청이 겹칠 때 메모리 피크가 운영상 병목이었습니다. 한 대가 멈추면 AI 기능 전체가 중단되는 구조이기도 했습니다.</p>
-<h4>선택한 접근과 이유</h4>
-<p>Python 백엔드에서 OpenAI SDK·LangChain을 이용해 입력 컨텍스트와 메일 유형별 필수 요소를 나눴습니다. 고객 인터뷰에서 반복적으로 쓰는 양식의 수요를 확인해, 매번 처음부터 생성하는 방식보다 템플릿 DB를 중심에 두고 AI가 추천·보완하는 방향을 잡았습니다. 첨부 이미지의 텍스트는 OCR로 읽고, 생성 결과와 외부 콘텐츠는 Zero Trust 관점에서 sanitize해 표시 경계를 분리했습니다.</p>
-<p>서버 한 대의 메모리 피크와 장애 위험은 요청 처리만 조정해서 해결하기 어려웠습니다. 운영 서버를 직접 중단하지 않고 이미지 빌더에서 구성을 검증한 뒤, OCI Instance Pool 2대와 Private Load Balancer로 전환했습니다. AI 호출은 대기 시간이 길고 처리 중 상태가 인스턴스에 남으므로, 신규 요청의 가용성과 진행 중 요청의 한계를 따로 판단했습니다.</p>
-<h4>구현과 검증</h4>
-<p>메일 유형, 대상자 정보, 위협 수준을 프롬프트 입력으로 분리하고 발신자 페르소나 선택을 생성 흐름에 연결했습니다. 첨부·멀티모달 입력과 OCR 결과를 처리하며 동시 요청 때의 메모리 사용과 요청 지연을 확인했습니다. 생성한 메일은 sanitize 후 화면에 표시했고, 훈련 메일·퀴즈 기능을 실제 Mind-SAT 서비스에 배치했습니다.</p>
-<p>인프라는 운영 부트 볼륨의 클론으로 빌더 인스턴스를 만들고, 앱·스캐너·ClamAV가 함께 기동되는 이미지를 생성했습니다. TEST에서 인스턴스 한 대를 중지해 LB가 신규 요청을 남은 인스턴스로 보내고 풀이 새 인스턴스를 보충하는지 확인한 뒤 PROD 전환을 마쳤습니다.</p>
-<h4>결과</h4>
-<p>AI 콘텐츠 생성 기능을 실제 보안교육 서비스에 제공했습니다. 단일 장애점이던 AI 서버는 2대 풀과 Private Load Balancer 구조로 바뀌었고, TEST에서 한 대 장애 시 신규 요청의 연속 처리와 자동 보충을 검증했습니다. 처리 중이던 요청은 장애 인스턴스와 함께 유실될 수 있어 백엔드 타임아웃을 1차 안전망으로 두었습니다.</p>
-`},me={slug:`design-system-mcp`,meta:{},bodyHtml:`<h3>프론트엔드 디자인 시스템 MCP</h3>
-<h4>문제 상황</h4>
-<p>제품 화면에 재사용할 공통 라이브러리가 부족했고, 같은 UI를 만들 때마다 Storybook 스토리와 사용법을 반복해서 작성해야 했습니다. AI 개발 도구도 기존 컴포넌트의 props, 색상·아이콘 이름을 모르니 없는 API나 임의 토큰을 제안했습니다. 팀이 AI로 화면을 만들려면 실제 코드에 맞는 조회 기준이 먼저 필요했습니다.</p>
-<h4>선택한 접근과 이유</h4>
-<p>기존 FDS 소스와 Storybook을 기준 데이터로 삼고, AI가 필요한 순간 컴포넌트·훅·색상·아이콘을 조회하는 MCP 서버를 만들었습니다. 사람이 문서를 프롬프트에 붙여 넣는 방식은 변경될 때마다 낡아집니다. 그래서 TypeScript AST, JSDoc, Storybook 예제와 디자인 토큰에서 레지스트리를 생성하고, 소스가 바뀌면 생성 단계에서 정보를 자동 업데이트하도록 했습니다.</p>
-<h4>구현과 검증</h4>
-<p>공개된 컴포넌트와 훅을 정적 분석해 props, 설명, 예제, 아이콘 variant, 색상 토큰을 <code>generated-registry.json</code>에 담았습니다. MCP 도구는 목록·검색·상세 조회를 나눠 제공하며 Figma의 색상값이나 아이콘 단서를 실제 FDS 토큰에 연결합니다. 새 스토리를 반복 작성하는 대신 기존 Storybook 예제를 AI가 재사용할 수 있게 했습니다. 약 50개 컴포넌트, 20개 훅, 100여 개 아이콘·컬러 항목을 구조화하고 도구 조회 테스트로 결과를 확인했습니다.</p>
-<h4>결과</h4>
-<p>팀원 4명이 MCP로 기존 컴포넌트와 토큰을 찾아 UI 구현에 활용했습니다. 이 작업으로 AI가 제품 코드를 작성할 때 확인할 수 있는 디자인 시스템 기준을 마련했습니다.</p>
-`},D={slug:`frontend-platform`,meta:{},bodyHtml:`<h3>Outlook Add-in 개발</h3>
-<h4>문제 상황</h4>
-<p>기존 C#/.NET Outlook 클라이언트를 새 Outlook 환경에 맞춰 전환해야 했습니다. 고객사마다 Add-in 서버를 따로 두면 고객이 늘 때마다 서버 리소스와 설정 관리 부담도 늘어납니다. Mind-SAT 메일 신고와 Wrapsody eCo 문서 공유는 제품 API가 다르지만 Office 초기화, 메일 컨텍스트, Microsoft Graph API 권한 처리는 공통으로 필요했습니다.</p>
-<h4>선택한 접근과 이유</h4>
-<p>2인 협업으로 React·TypeScript와 Office.js 기반 M365 Web Add-in을 만들었습니다. 고객사별 서버를 늘리는 대신 공통 Node.js/Express 서버를 Graph API 프록시로 두고, 제품 API는 각 제품에서 직접 호출하게 했습니다. 메일 작업은 메모리 큐로 처리하고, 테넌트별 권한과 암호화된 설정을 분리해 공통 서버에서도 고객사 경계를 유지했습니다. <code>mindsat</code>, <code>eco</code>, <code>m365</code>, <code>shared</code> 모듈을 나눈 이유는 제품 기능을 추가할 때 Office 연동 코드를 다시 만들지 않기 위해서입니다.</p>
-<h4>구현과 검증</h4>
-<p>기존 클라이언트의 메일 작성·수신 흐름을 분석해 Office.js로 사용자·메일 컨텍스트를 읽는 계층을 만들었습니다. <code>OfficeServiceProvider</code>와 <code>MailClient</code>가 Office runtime 접근을 맡고, 제품별 service가 신고·문서 공유 동작을 담당합니다. 서버는 Graph API가 필요한 메일 조회·전달·삭제를 중개합니다. 테넌트별 제품 활성화, API 주소, 권한과 암호화된 설정, 개발·운영 manifest를 분리해 고객사 환경에 맞춰 배포했습니다. Wrapsody eCo에는 메일 작성, 문서 첨부, 수신 메일 기반 액션을 연결하고 Outlook 환경·다국어 차이를 확인했습니다.</p>
-<h4>결과</h4>
-<p>공통 M365·Graph 연동 모듈을 재사용하면서 Wrapsody eCo Add-in의 추가 개발 기간을 기존 방식 대비 절반으로 줄였습니다. 고객사마다 서버를 따로 마련하던 부담도 공통 프록시 구조로 낮췄습니다. eCo Add-in은 2026년 5월 기준 24개 고객사·273명 운영 환경에 제공됐습니다.</p>
+<p>Mind-SAT은 약 41개 고객사가 사용하는 모의 피싱 훈련·보안교육 SaaS입니다. 산업군·부서·직급·기술 이해도·위협 수준·메일 유형을 바탕으로 훈련 메일과 퀴즈를 생성하는 AI 기능을 개발하고, 서비스 운영에 필요한 인프라와 콘텐츠 보안 기준을 함께 설계했습니다.</p>
+<h4>1. 단일 AI 서버의 메모리 피크와 장애 위험 해소</h4>
+<h5>문제</h5>
+<p>AI 기능은 1 OCPU·4GB 단일 서버에서 41개 고객사의 요청을 처리하고 있었습니다. 메일 본문의 첨부파일을 분석하는 기능이 추가되면서 입력 문서와 중간 처리 결과를 메모리에 보관해야 했고, 동시 요청이 몰리면 메모리 사용량이 약 80%까지 올랐습니다. 이미지·멀티모달 처리에서는 여러 이미지를 멀티턴 동안 유지해야 해 순간적인 메모리 피크가 더 커질 수 있었습니다. 서버 한 대에 장애가 나면 AI 기능 전체가 중단되는 문제도 있었습니다.</p>
+<h5>접근</h5>
+<p>한 서버의 사양만 높이는 방식보다, 동시 요청 때 파일 처리에서 발생하는 메모리 피크를 여러 서버로 분산하는 편이 장기 운영에 적합하다고 판단했습니다. 서버 증설과 장애 복구를 반복할 수 있도록 인스턴스 생성 과정도 이미지로 관리하기로 했습니다.</p>
+<h5>실행</h5>
+<p>AI 서버를 별도로 분리하고 OCI Instance Pool과 Private Load Balancer를 사용한 구조를 구성했습니다. 동일한 실행 환경을 다시 만들 수 있도록 이미지 인스턴스 빌더도 만들었습니다. Load Balancer가 요청을 여러 인스턴스로 나누고, Instance Pool이 장애 인스턴스를 대체할 수 있도록 구성했습니다.</p>
+<h5>결과</h5>
+<p>첨부파일과 이미지 처리에서 발생하는 순간적인 메모리 사용을 여러 서버로 분산할 수 있게 됐습니다. 단일 서버 장애가 AI 기능 전체 중단으로 이어지던 구조를 장애 복구가 가능한 고가용성 구조로 바꿨습니다.</p>
+<h4>2. 훈련 기획자와 AI 생성물까지 검증하는 Zero Trust 적용</h4>
+<h5>문제</h5>
+<p>모의 피싱 훈련을 만드는 기획자는 업무상 악성 메일과 비슷한 콘텐츠를 작성할 수 있습니다. 그러나 입력 내용을 그대로 신뢰하면 훈련 메일에 악성 스크립트가 들어갈 수 있고, AI가 생성한 템플릿도 같은 위험을 가질 수 있었습니다. 보안 제품이면서도 훈련 기획자의 입력을 신뢰하고 있던 지점을 다시 봐야 했습니다.</p>
+<h5>접근</h5>
+<p>&quot;훈련 기획자도 신뢰하지 않는다&quot;는 Zero Trust 원칙을 제품 입력과 AI 출력에 함께 적용했습니다. 사람이 작성한 콘텐츠와 AI가 만든 콘텐츠를 같은 표시 기준으로 검사하기로 했습니다.</p>
+<h5>실행</h5>
+<p>사용자가 훈련을 등록하기 전에 메일 콘텐츠를 sanitize하고, AI가 생성한 메일 템플릿도 동일하게 sanitize하도록 처리했습니다. 사용자가 입력한 콘텐츠와 AI 생성 결과가 검증 단계를 거친 뒤 제품 화면과 훈련 흐름에 들어가도록 연결했습니다.</p>
+<h5>결과</h5>
+<p>훈련 기획자 입력과 AI 생성물 중 어느 한쪽도 신뢰 경계를 우회하지 않도록 했습니다. 모의 피싱 콘텐츠를 다루는 제품 특성에 맞춰 콘텐츠가 등록되고 표시되는 지점에 공통 보안 기준을 적용했습니다.</p>
+<h4>3. AI 기능보다 먼저 고객이 원하는 훈련 생성 방식 확인</h4>
+<h5>문제</h5>
+<p>AI 개발 투자를 늘리던 시점에, AI 기능을 더 쉽게 확장할지 아니면 훈련 템플릿을 다양하게 만드는 데 리소스를 쓸지 우선순위를 정해야 했습니다. 개발 관점에서는 AI 생성 기능의 사용성을 높이는 것이 먼저라고 생각했지만, 실제 고객이 같은 우선순위를 갖는지는 확인이 필요했습니다.</p>
+<h5>접근</h5>
+<p>기업 행사에서 고객과 직접 대화하며 훈련 담당자가 어떤 방식으로 콘텐츠를 만드는지 확인했습니다. 고객은 AI로 템플릿을 자유롭게 만드는 플랫폼보다, 템플릿 DB가 충분하고 몇 번의 선택만으로 훈련을 만들 수 있는 제품을 더 원했습니다.</p>
+<h5>실행</h5>
+<p>매번 처음부터 생성하는 방식에만 투자하지 않고, 다양한 템플릿 DB를 중심에 두고 AI가 추천하고 보완하는 방향으로 제품 우선순위를 조정했습니다. 생성 기술 자체보다 훈련 담당자가 빠르게 결과를 선택하고 사용할 수 있는 흐름을 기준으로 기능을 판단했습니다.</p>
+<h5>결과</h5>
+<p>AI 기능의 범위를 개발 편의가 아니라 실제 구매자와 사용자의 요구를 기준으로 정리했습니다. &quot;AI로 무엇이든 생성&quot;하는 방향에서 &quot;준비된 템플릿으로 쉽게 훈련 생성&quot;하는 방향으로 제품 판단의 기준을 바꿨습니다.</p>
+<h4>4. 정형적인 AI 메일을 실제 훈련 콘텐츠로 확장</h4>
+<h5>문제</h5>
+<p>AI가 생성한 훈련 메일은 텍스트 중심의 비슷한 형식으로 반복되는 경향이 있었습니다. 실제 피싱 메일처럼 이미지 안에 문구가 들어간 콘텐츠를 분석하고 활용하려면 텍스트 입력만으로는 부족했습니다. 대상자의 산업군과 역할에 따라 메일의 상황과 난이도도 달라져야 했습니다.</p>
+<h5>접근</h5>
+<p>이미지 속 텍스트까지 처리할 수 있도록 OCR을 지원하고, 산업군·부서·직급·기술 이해도·위협 수준·메일 유형을 각각 독립된 프롬프트 컨텍스트로 나눴습니다. 발신자 페르소나도 사용자가 선택할 수 있도록 제품 흐름에 포함했습니다.</p>
+<h5>실행</h5>
+<p>OpenAI SDK·LangChain 기반 Python 백엔드에 컨텍스트별 프롬프트와 OCR 결과를 연결했습니다. LLM 응답 지연과 동시 실행을 고려해 요청을 처리하고, 생성 결과 sanitize와 발신자 페르소나 선택을 메일 생성 흐름에 반영했습니다.</p>
+<h5>결과</h5>
+<p>훈련 대상과 위협 수준에 맞춘 메일·퀴즈 생성 기능을 실제 Mind-SAT 보안교육 서비스에 배치했습니다. 이미지가 포함된 입력과 다양한 대상자 조건을 훈련 콘텐츠 생성에 사용할 수 있게 했습니다.</p>
+`},me={slug:`design-system-mcp`,meta:{},bodyHtml:`<h3>프론트엔드 디자인 시스템과 MCP 개발</h3>
+<p>제품마다 따로 만들던 UI를 공통 디자인 시스템으로 정리하고, AI 개발 도구가 이 디자인 시스템을 직접 조회할 수 있는 MCP 서버로 확장한 프로젝트입니다. 디자인 시스템 구축과 문서화 병목 개선, AI 코드 생성의 정확도 개선을 이어서 진행했습니다.</p>
+<h4>1. 제품마다 달랐던 UI를 공통 디자인 시스템으로 통합</h4>
+<h5>문제</h5>
+<p>2024년 당시 사내 제품을 각기 다른 담당자가 개발하고 있었고, 제품 사이에서 재사용할 공통 디자인 시스템 라이브러리가 없었습니다. 누구든 언젠가는 해야 할 일이었지만 당장 맡아 진행할 업무로 잡히지 않았습니다. 공통 컴포넌트를 만들어도 Storybook 스토리와 사용법을 반복해서 작성해야 해 라이브러리를 확장하는 데 계속 시간이 들었습니다.</p>
+<h5>접근</h5>
+<p>제품별 화면을 모두 한 번에 통일하기보다, 반복해서 만드는 UI와 문서 작성 작업을 먼저 병목으로 정의했습니다. 제품에서 재사용할 컴포넌트와 색상·아이콘 토큰을 공통 라이브러리로 만들고 Storybook에서 사용 기준을 확인할 수 있도록 정리했습니다.</p>
+<h5>실행</h5>
+<p>여러 제품에서 공통으로 사용할 UI 컴포넌트와 디자인 토큰을 라이브러리로 구성했습니다. 컴포넌트의 사용 예시를 Storybook에 연결해 제품 개발자가 구현 화면과 사용 방법을 함께 확인할 수 있게 했습니다. 이후 문서를 반복해서 붙여 넣거나 다시 작성하지 않아도 실제 소스를 기준으로 정보를 가져올 수 있는 구조를 준비했습니다.</p>
+<h5>결과</h5>
+<p>제품마다 같은 UI를 다시 만드는 대신 공통 컴포넌트와 토큰을 재사용할 수 있는 기준이 생겼습니다. 이 디자인 시스템은 이후 AI 개발 도구가 참고할 실제 코드베이스이자 MCP 서버의 데이터 원천이 됐습니다.</p>
+<h4>2. AI가 기존 컴포넌트를 찾지 못해 다시 만드는 문제 해결</h4>
+<h5>문제</h5>
+<p>AI로 프론트엔드를 개발할 때 원하는 결과가 한 번에 나오지 않아 리뷰와 수정이 반복됐습니다. 기존 코드베이스를 충분히 제공하면 결과가 나아졌지만, AI는 재사용할 컴포넌트와 토큰을 스스로 찾지 못해 이미 있는 모듈을 다시 만들거나 실제로 존재하지 않는 사용법을 제안했습니다. 프론트엔드는 재사용성과 확장성이 중요한데, AI 개발 과정에서는 같은 모듈이 계속 생기는 문제가 있었습니다.</p>
+<h5>접근</h5>
+<p>디자인 시스템 전체를 매번 프롬프트에 넣는 대신, AI가 필요한 순간 실제 컴포넌트와 색상·아이콘 토큰을 조회하도록 MCP 서버를 만들기로 했습니다. 사람이 별도 문서를 계속 갱신하지 않아도 소스 변경을 자동으로 반영하는 것을 운영 조건으로 잡았습니다.</p>
+<h5>실행</h5>
+<p>디자인 시스템의 컴포넌트, Storybook 예제, 색상 토큰, 아이콘 토큰을 조회할 수 있는 레지스트리와 MCP 도구를 만들었습니다. AI는 목록·검색·상세 조회를 통해 기존 컴포넌트의 사용법과 토큰을 확인할 수 있습니다. 소스가 바뀌면 생성 단계에서 레지스트리도 갱신되도록 구성해 별도 문서 관리 공수를 줄였습니다.</p>
+<h5>결과</h5>
+<p>AI가 임의의 컴포넌트나 토큰을 만드는 대신 실제 디자인 시스템을 기준으로 코드를 작성할 수 있게 됐습니다. 현재 프론트엔드 엔지니어 4명이 MCP를 사용해 기존 컴포넌트와 토큰을 찾고 제품 UI 개발에 활용하고 있습니다.</p>
+`},D={slug:`frontend-platform`,meta:{},bodyHtml:`<h3>Outlook Add-in과 공통 Graph API 프록시 개발</h3>
+<p>Mind-SAT 메일 신고와 Wrapsody eCo 문서 공유 기능을 Outlook 안에서 제공하기 위해 Add-in 프론트엔드와 Microsoft Graph API 프록시 서버를 개발했습니다. 고객사별 서버와 권한 설정을 수용하면서 여러 제품이 공통으로 사용할 수 있는 구조를 만드는 데 초점을 맞췄습니다.</p>
+<h4>1. 고객사마다 서버를 추가하지 않는 멀티테넌트 프록시 구성</h4>
+<h5>문제</h5>
+<p>고객사는 서로 분리된 서버 환경을 사용합니다. Outlook Add-in을 제공할 때마다 고객사별 전용 서버를 추가하면 단순한 메일 조회·전달·삭제 기능을 위해 서버 자원과 운영 설정을 반복해서 관리해야 했습니다. Graph API를 중개하는 프록시는 여러 제품에서 공통으로 사용할 수 있는데도 고객사와 제품마다 따로 만드는 구조였습니다.</p>
+<h5>접근</h5>
+<p>제품별 API는 각 제품이 담당하고, 메일 CRUD와 Graph API 연동만 공통 프록시 서버가 맡도록 책임을 좁혔습니다. 하나의 서버가 권한 구조가 다른 여러 고객사 테넌트와 연결될 수 있도록 멀티테넌트 구조로 설계했습니다.</p>
+<h5>실행</h5>
+<p>단일 Graph API 프록시 서버를 구축하고 메모리 큐로 동시 요청을 처리했습니다. 고객사별 앱 키·시크릿과 설정 파일은 암호화해 저장했습니다. 요청이 들어오면 해당 테넌트의 설정과 권한을 사용해 고객사 서버와 통신하도록 구성했습니다. Add-in 프론트엔드에서는 메일 컨텍스트를 읽고 Mind-SAT 메일 신고와 Wrapsody eCo 문서 공유 흐름을 각 제품 API에 연결했습니다.</p>
+<h5>결과</h5>
+<p>고객사마다 별도 Add-in 서버를 추가하지 않고 하나의 프록시에서 여러 테넌트와 제품을 지원할 수 있게 됐습니다. 공통 메일 처리와 고객사별 권한·설정의 경계를 유지하면서 서버 자원과 반복 운영 작업을 줄였습니다.</p>
+<h4>2. 제품을 추가해도 공통 Outlook 연동을 다시 만들지 않는 구조</h4>
+<h5>문제</h5>
+<p>Mind-SAT Add-in을 만든 뒤 Wrapsody eCo Add-in을 추가해야 했습니다. 제품 기능은 다르지만 Outlook 초기화, 메일 컨텍스트 조회, Graph API 연동, 인증과 오류 처리는 공통입니다. 제품별 앱을 별도 번들로만 만들면 같은 연동 코드를 다시 작성하게 됩니다.</p>
+<h5>접근</h5>
+<p>프론트엔드 번들에 제품 단위 앱을 추가할 수 있게 하되, Outlook과 Graph API 연동 모듈은 공통으로 재사용하는 구조를 선택했습니다. 제품 기능과 플랫폼 기능의 경계를 나눠 새 제품을 추가할 때 제품 로직에 집중할 수 있도록 했습니다.</p>
+<h5>실행</h5>
+<p>React·TypeScript와 Office.js를 사용해 Add-in 프론트엔드를 구성하고, 제품 앱과 공통 모듈을 분리했습니다. Mind-SAT의 메일 신고와 Wrapsody eCo의 메일 작성·문서 첨부·수신 메일 액션은 각 제품 모듈에 두고, Outlook 초기화와 메일 컨텍스트, Graph API 통신은 공통 모듈에서 처리했습니다.</p>
+<h5>결과</h5>
+<p>Mind-SAT에서 만든 공통 Outlook 연동 모듈을 Wrapsody eCo에 재사용해 추가 개발 기간을 기존 대비 절반으로 줄였습니다. 이후 제품이 추가돼도 공통 연동 코드를 다시 만들지 않고 제품 기능 중심으로 확장할 수 있는 기반을 마련했습니다.</p>
 `},O=oe,he=ue,ge=T,_e=E,ve=de;function ye(...e){return e.map(e=>e.bodyHtml).join(`
 `)}var be=ye(O,fe,pe,me,D),xe=ye(O,fe,pe,me,D),Se=ye(O,me,D,fe,pe),Ce=[{kind:`resume`,position:`ai`,label:`AI 이력서`,title:`AI Engineer Resume`,slug:`resume-ai`,bodyHtml:he.bodyHtml},{kind:`resume`,position:`frontend`,label:`Frontend 이력서`,title:`Frontend Engineer Resume`,slug:`resume-frontend`,bodyHtml:ge.bodyHtml},{kind:`career`,position:`ai`,label:`AI 경력기술서`,title:`AI Engineer Career Description`,slug:`career-ai`,bodyHtml:_e.bodyHtml},{kind:`career`,position:`frontend`,label:`Frontend 경력기술서`,title:`Frontend Engineer Career Description`,slug:`career-frontend`,bodyHtml:ve.bodyHtml},{kind:`portfolio`,label:`Portfolio`,title:`Product Engineering Portfolio`,slug:`portfolio`,bodyHtml:be},{kind:`portfolio`,position:`ai`,label:`AI Engineer 포트폴리오`,title:`AI Engineer Portfolio`,slug:`portfolio-ai`,bodyHtml:xe},{kind:`portfolio`,position:`frontend`,label:`Frontend Engineer 포트폴리오`,title:`Frontend Engineer Portfolio`,slug:`portfolio-frontend`,bodyHtml:Se}];function we(e){let t=e.kind===`portfolio`?e:{kind:e.kind,position:e.position??`ai`};return Ce.find(e=>e.kind===t.kind&&e.position===t.position)??Ce[Ce.length-1]}var Te=`/portfolio/`;function Ee(e){let t=e.trim();return!t||t===`/`?``:`/${t.replace(/^\/+|\/+$/g,``)}`}function De(e){return(e.startsWith(`/`)?e:`/${e}`).replace(/\/+$/,``)||`/`}function Oe(e,t){let n=De(e),r=Ee(t);return r?n===r?`/`:n.startsWith(`${r}/`)?n.slice(r.length)||`/`:n:n}function ke(e,t=Te){let n=Oe(e,t);if(n===`/`)return{kind:`home`};if(n===`/resume`)return{kind:`resume-index`};if(n===`/career-description`)return{kind:`career-index`};if(n===`/portfolio`)return{kind:`portfolio-index`};let r=n.match(/^\/portfolio\/(ai-engineer|frontend-engineer)$/);if(r)return{kind:`portfolio`,position:r[1]===`ai-engineer`?`ai`:`frontend`};let i=n.match(/^\/resume\/(ai-engineer|frontend-engineer)$/);if(i)return{kind:`resume`,position:i[1]===`ai-engineer`?`ai`:`frontend`};let a=n.match(/^\/career-description\/(ai-engineer|frontend-engineer)$/);return a?{kind:`career`,position:a[1]===`ai-engineer`?`ai`:`frontend`}:{kind:`home`}}function Ae(e,t=Te){return`${Ee(t)}${(()=>{switch(e.kind){case`home`:return`/`;case`resume-index`:return`/resume/`;case`resume`:return`/resume/${e.position===`ai`?`ai-engineer`:`frontend-engineer`}/`;case`career-index`:return`/career-description/`;case`career`:return`/career-description/${e.position===`ai`?`ai-engineer`:`frontend-engineer`}/`;case`portfolio-index`:return`/portfolio/`;case`portfolio`:return`/portfolio/${e.position===`ai`?`ai-engineer`:`frontend-engineer`}/`}})()}`||`/`}function je(e,t=Te){let n=decodeURIComponent(e.replace(/^#/,``)),r=(()=>{switch(n){case`resume/ai`:return{kind:`resume`,position:`ai`};case`resume/frontend`:return{kind:`resume`,position:`frontend`};case`career/ai`:return{kind:`career`,position:`ai`};case`career/frontend`:return{kind:`career`,position:`frontend`};case`portfolio`:return{kind:`portfolio-index`};default:return null}})();return r?Ae(r,t):null}var Me={page:`_page_16n38_1`,sectionLinks:`_sectionLinks_16n38_7`,standalonePage:`_standalonePage_16n38_15`,routeLinks:`_routeLinks_16n38_19`,summary:`_summary_16n38_26`,document:`_document_16n38_41`,documentHead:`_documentHead_16n38_47`},Ne=se,Pe=oe,Fe=ne,Ie=re,Le=ie,Re=ae,ze=ce,Be=le,Ve=ue,He=T,Ue=E,We=de,Ge=we({kind:`portfolio`}),k=`/`,Ke=[{id:`home`,label:`Home`},{id:`summary`,label:`Summary`},{id:`resumes`,label:`Resumes`,children:[{id:`resume-ai`,label:`AI Engineer`},{id:`resume-frontend`,label:`Frontend Engineer`}]},{id:`timeline`,label:`Work Timeline`},{id:`skills`,label:`Skills`},{id:`education`,label:`Education`},{id:`certifications`,label:`Certifications`},{id:`activities`,label:`Activities`},{id:`links`,label:`Links`},{id:`careers`,label:`Career Description`,children:[{id:`career-ai`,label:`AI Engineer`},{id:`career-frontend`,label:`Frontend Engineer`}]},{id:`portfolio`,label:`Portfolio`}];function qe({id:e,title:t,bodyHtml:n}){return(0,p.jsxs)(`article`,{id:e,className:Me.document,tabIndex:-1,children:[(0,p.jsx)(`div`,{className:Me.documentHead,children:(0,p.jsx)(`h3`,{children:t})}),(0,p.jsx)(w,{html:n})]})}function Je(){return(0,l.useEffect)(()=>{let e=decodeURIComponent(window.location.hash.slice(1));e&&document.getElementById(e)?.scrollIntoView({behavior:`instant`})},[]),(0,p.jsxs)(p.Fragment,{children:[(0,p.jsx)(`a`,{className:`skip-link`,href:`#main`,children:`본문 바로가기`}),(0,p.jsx)(C,{items:Ke}),(0,p.jsxs)(`div`,{id:`home`,className:Me.page,tabIndex:-1,children:[(0,p.jsx)(x,{meta:Ne.meta}),(0,p.jsxs)(`main`,{id:`main`,children:[(0,p.jsxs)(`div`,{id:`summary`,className:Me.summary,tabIndex:-1,children:[(0,p.jsx)(`h2`,{children:`Summary`}),(0,p.jsx)(w,{html:Pe.bodyHtml})]}),(0,p.jsxs)(te,{id:`resumes`,title:`Resumes`,children:[(0,p.jsxs)(`nav`,{className:Me.sectionLinks,"aria-label":`이력서 바로가기`,children:[(0,p.jsx)(`a`,{href:Ae({kind:`resume`,position:`ai`},k),children:`AI Engineer`}),(0,p.jsx)(`a`,{href:Ae({kind:`resume`,position:`frontend`},k),children:`Frontend Engineer`})]}),(0,p.jsx)(qe,{id:`resume-ai`,title:`AI Engineer Resume`,bodyHtml:Ve.bodyHtml}),(0,p.jsx)(qe,{id:`resume-frontend`,title:`Frontend Engineer Resume`,bodyHtml:He.bodyHtml})]}),(0,p.jsx)(te,{id:`timeline`,title:`Work Timeline`,children:(0,p.jsx)(w,{html:Be.bodyHtml})}),(0,p.jsx)(te,{id:`skills`,title:`Skills`,children:(0,p.jsx)(w,{html:ze.bodyHtml})}),(0,p.jsx)(te,{id:`education`,title:`Education`,children:(0,p.jsx)(w,{html:Le.bodyHtml})}),(0,p.jsx)(te,{id:`certifications`,title:`Certifications`,children:(0,p.jsx)(w,{html:Ie.bodyHtml})}),(0,p.jsx)(te,{id:`activities`,title:`Activities`,children:(0,p.jsx)(w,{html:Fe.bodyHtml})}),(0,p.jsx)(te,{id:`links`,title:`Links`,children:(0,p.jsx)(w,{html:Re.bodyHtml})}),(0,p.jsxs)(te,{id:`careers`,title:`Career Description`,children:[(0,p.jsxs)(`nav`,{className:Me.sectionLinks,"aria-label":`경력기술서 바로가기`,children:[(0,p.jsx)(`a`,{href:Ae({kind:`career`,position:`ai`},k),children:`AI Engineer`}),(0,p.jsx)(`a`,{href:Ae({kind:`career`,position:`frontend`},k),children:`Frontend Engineer`})]}),(0,p.jsx)(qe,{id:`career-ai`,title:`AI Engineer Career Description`,bodyHtml:Ue.bodyHtml}),(0,p.jsx)(qe,{id:`career-frontend`,title:`Frontend Engineer Career Description`,bodyHtml:We.bodyHtml})]}),(0,p.jsxs)(te,{id:`portfolio`,title:`Portfolio`,children:[(0,p.jsxs)(`nav`,{className:Me.sectionLinks,"aria-label":`포트폴리오 바로가기`,children:[(0,p.jsx)(`a`,{href:Ae({kind:`portfolio`,position:`ai`},k),children:`AI Engineer`}),(0,p.jsx)(`a`,{href:Ae({kind:`portfolio`,position:`frontend`},k),children:`Frontend Engineer`})]}),(0,p.jsx)(w,{html:Ge.bodyHtml})]})]}),(0,p.jsx)(m,{name:Ne.meta.name})]})]})}function Ye({kind:e}){let t=e===`resume-index`,n=e===`career-index`,r=t?`Resume`:n?`Career Description`:`Portfolio`,i=t?`지원 포지션에 맞춰 선택할 수 있는 이력서입니다.`:n?`지원 포지션에 맞춰 선택할 수 있는 경력기술서입니다.`:`지원 포지션에 맞춰 강조점을 달리한 포트폴리오입니다.`,a=t?[{kind:`resume`,position:`ai`},{kind:`resume`,position:`frontend`}]:n?[{kind:`career`,position:`ai`},{kind:`career`,position:`frontend`}]:[{kind:`portfolio`,position:`ai`},{kind:`portfolio`,position:`frontend`}];return(0,p.jsx)(p.Fragment,{children:(0,p.jsxs)(`main`,{id:`main`,children:[(0,p.jsx)(`h2`,{children:r}),(0,p.jsx)(`p`,{children:i}),(0,p.jsxs)(`nav`,{className:Me.routeLinks,"aria-label":`${r} 포지션 선택`,children:[(0,p.jsx)(`a`,{href:Ae(a[0],k),children:`AI Engineer`}),(0,p.jsx)(`a`,{href:Ae(a[1],k),children:`Frontend Engineer`})]})]})})}function Xe({route:e}){let t=e.kind===`resume`||e.kind===`career`?we({kind:e.kind,position:e.position}):e.kind===`portfolio`?we({kind:`portfolio`,position:e.position}):null;return(0,p.jsxs)(`div`,{className:`${Me.page} ${Me.standalonePage}`,children:[(0,p.jsx)(`a`,{className:`skip-link`,href:`#main`,children:`본문 바로가기`}),(0,p.jsx)(x,{meta:Ne.meta}),e.kind===`resume-index`||e.kind===`career-index`||e.kind===`portfolio-index`?(0,p.jsx)(Ye,{kind:e.kind}):t?(0,p.jsx)(qe,{id:`document-content`,title:t.title,bodyHtml:t.bodyHtml}):null,(0,p.jsx)(m,{name:Ne.meta.name})]})}function Ze(){let e=je(window.location.hash,k);return e?(window.history.replaceState({},``,e),ke(e,k)):ke(window.location.pathname,k)}function Qe(){let e=Ze();return e.kind===`home`?(0,p.jsx)(Je,{}):(0,p.jsx)(Xe,{route:e})}var $e=document.getElementById(`root`);if(!$e)throw Error(`#root 엘리먼트를 찾지 못했습니다`);_(g()),(0,u.createRoot)($e).render((0,p.jsx)(l.StrictMode,{children:(0,p.jsx)(Qe,{})}));
