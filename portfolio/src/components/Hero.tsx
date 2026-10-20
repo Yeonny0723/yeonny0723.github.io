@@ -2,7 +2,7 @@ import type { ProfileMeta } from '../types';
 import { ThemeToggle } from './ThemeToggle';
 import styles from './Hero.module.scss';
 
-export function Hero({ meta }: { meta: ProfileMeta }) {
+export function Hero({ meta, showContact = true }: { meta: ProfileMeta; showContact?: boolean }) {
   return <header className={styles.hero}>
     <div className={styles.heroTop}>
       <div>
@@ -14,11 +14,11 @@ export function Hero({ meta }: { meta: ProfileMeta }) {
       </div>
       <ThemeToggle />
     </div>
-    <div className={styles.contact}>
+    {showContact && <div className={styles.contact}>
       {meta.email && <a href={`mailto:${meta.email}`}>{meta.email}</a>}
       {meta.github && <a href={meta.github} target="_blank" rel="noreferrer noopener">GitHub</a>}
       {meta.linkedin && <a href={meta.linkedin} target="_blank" rel="noreferrer noopener">LinkedIn</a>}
       {meta.blog && <a href={meta.blog} target="_blank" rel="noreferrer noopener">Blog</a>}
-    </div>
+    </div>}
   </header>;
 }

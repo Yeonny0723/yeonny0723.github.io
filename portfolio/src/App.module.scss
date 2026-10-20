@@ -12,6 +12,23 @@
   font-size: 0.9rem;
 }
 
+.standalonePage {
+  min-height: 100vh;
+
+  .document {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+.routeLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin-top: 2rem;
+}
+
 .summary {
   margin-bottom: 2rem;
   padding: 1.25rem 1.5rem;
@@ -50,6 +67,10 @@
   .page {
     margin-left: max(280px, calc((100vw - 1200px) / 2 + 280px));
     margin-right: 2rem;
+  }
+
+  .page.standalonePage {
+    margin: 0 auto;
   }
 
   .sectionLinks { display: none; }
