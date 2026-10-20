@@ -6,15 +6,15 @@
 
 팀과 제품의 성장을 우선하고, 호기심을 바탕으로 업무의 경계를 넓혀온 4년차 개발자입니다. 현재 보안 문서 플랫폼 Wrapsody와 보안교육 제품 Mind-SAT에서 문서 생성 Agent, 멀티모달 훈련 콘텐츠 생성 Agent, RAG·Text2SQL 품질 평가를 개발하고 AI 서버를 운영하고 있습니다.
 
-프론트엔드에서 시작해 백엔드, AI 애플리케이션, 운영까지 범위를 넓혀 오며, 하나의 기능을 제품의 전체 흐름으로 보는 기준을 세웠습니다. 새로운 기술을 많이 쓰기보다 복잡한 문제를 적절한 경계로 나누고, 코드·규칙·AI가 책임질 범위를 명확히 하는 것을 중요하게 생각합니다. AI 기능에서도 평가셋, 모델 비교, 입력·실행·결과 검증으로 LLM의 불확실성을 운영 가능한 기준으로 바꾸어 왔습니다. 이 경험으로 새로운 AI 기능을 기존 제품에 안정적으로 도입하고, 팀이 더 빠르게 시도하며 안전하게 제품을 발전시킬 수 있도록 기여하겠습니다.
+프론트엔드에서 시작해 백엔드, AI 애플리케이션, 운영까지 범위를 넓혀 오며, 하나의 기능을 제품의 전체 흐름으로 보는 기준을 세웠습니다. 새로운 기술을 많이 쓰기보다 복잡한 문제를 적절한 경계로 나누고, 코드·규칙·AI가 책임질 범위를 명확히 하는 것을 중요하게 생각합니다. AI 기능에서도 평가셋, 모델 비교, 비용 관리로 LLM의 불확실성을 운영 가능한 기준으로 바꾸어 왔습니다. 이 경험으로 새로운 AI 기능을 기존 제품에 안정적으로 도입하고, 팀이 더 빠르게 시도하며 안전하게 제품을 발전시킬 수 있도록 기여하겠습니다.
 
 ## Core Skills
 
 | 분야 | 기술 |
 | --- | --- |
-| AI·LLM | OpenAI SDK · Responses API · Code Interpreter · LangChain · MCP · vLLM · OpenAI Realtime API · LLM 평가셋 설계 |
+| AI·LLM | OpenAI SDK · LangChain · MCP |
 | Backend | Python · FastAPI · Java · Spring Boot · JPA · MySQL · Redis · Node.js · Express |
-| Infra·Security | OCI · Docker · OpenAI Network Policy · Prompt Injection 검증 · Jenkins · GitLab CI/CD |
+| Infra | OCI · Jenkins · GitLab CI/CD |
 | Frontend·Quality | React · TypeScript · Next.js · Flutter · Playwright |
 
 ## Work Experience
@@ -23,17 +23,15 @@
 
 #### AI 제품 개발 · 2025 – 현재
 
-**Wrapsody 문서 생성 Agent (메인 개발)**
+**Wrapsody 템플릿 기반 문서 생성 Agent (메인 개발)**
 
-- 파일 구조 해석 → 변경 영역 추론 → 생성 → 렌더링 파이프라인을 설계하고, 멀티턴 Agent가 요청에 필요한 단계·도구만 선택하도록 구성
-- 사용자의 불명확한 요구를 역질문으로 구체화하고, 파일 구조 분석 → 변경 영역 확인 → 변경 계획 → Python 코드 생성·실행 → 렌더링 → 보안 검증으로 이어지는 Agent 파이프라인을 구성
-- 긴 문서를 약 8,000자 단위로 나눠 변경 계획에 필요한 청크를 선택하고, 이전 멀티턴 이력과 함께 다음 단계에 전달
-- API와 ThreadPool 워커를 분리하고 Spring Boot·MySQL로 세션·작업 상태를 관리해 화면 종료·재접속 후에도 진행 상태를 복원
-- 요청 등록·처리·결과 조회 API를 분리하고 작업 상태를 영속화해 비동기 문서 생성 작업의 전체 수명주기를 설계
-- Java·Spring Boot는 요청·세션·작업 오케스트레이션을, Python 서버는 문서 분석·코드 생성·실행·렌더링을 담당하도록 책임을 분리
-- Server-Sent Events(SSE)로 작업 단계·진행 상태·실패 원인을 실시간 전달
-- OpenAI Responses API·Code Interpreter로 생성된 Python 파일을 격리된 샌드박스에서 실행하고, 실패 원인을 모델에 재전달해 수정 코드를 재생성
-- 사용자 지침·이전 대화·원천 파일·템플릿의 Prompt Injection과 OpenAI Network Policy 위반 가능성을 검증하고, 결과 Office 파일의 Macro·VBA·ActiveX·OLE·외부 참조 요소를 ZIP/XML 구조로 검사
+- 템플릿 문서와 여러 원천 파일을 입력받아 양식을 채운 docx·xlsx·pptx 문서를 생성하는 Agent를 설계: 문서 구조 분석 → 변경 영역 확인 → 변경 계획 → Python 코드 생성 → 샌드박스 실행 → 렌더링 → 보안 검증으로 단계를 나누고, 규칙으로 결정 가능한 단계는 LLM 없이 처리
+- 요구가 불명확하면 바로 실행하지 않고 역질문으로 변경 대상·범위·출력 형식을 좁힌 뒤, 멀티턴 세션 맥락을 바탕으로 실행 계획을 확정
+- 청킹이 없던 구조 추론에 문서 구조 기준 청킹을 도입하고 크기를 실험해 8,000자로 확정, 변경과 관련된 청크만 전달해 추론 성공률 약 20% 향상
+- GPT-5.6 Luna·Terra·Sol을 정확도·비용 기준으로 비교 평가해, 최저가 Luna로 목표 정확도를 충족하고 Sol 대비 비용 약 1/10로 절감
+- OpenAI Responses API·Code Interpreter로 생성한 Python 코드를 격리된 샌드박스에서 실행하고, 실행·렌더링 오류를 모델에 다시 전달해 수정 코드를 재생성하는 피드백 루프 구성
+- 사용자 지침·멀티턴 이력·원천 파일·템플릿의 Prompt Injection을 실행 전 검사하고 Network Policy로 외부 접근을 차단, 결과 Office 파일을 ZIP/XML로 해제해 Macro·VBA·ActiveX·OLE·외부 참조를 검사
+- Spring Boot·MySQL(세션·작업 상태)과 Python 문서 처리 서버를 분리하고, requestId·Queue·ThreadPool 워커 기반 비동기 처리와 SSE 단계별 상태 전달로 수 분 걸리는 작업도 재접속 시 복원, Cleanup Scheduler로 자원 회수
 
 **검색·RAG 답변 품질 평가 체계**
 
@@ -69,7 +67,7 @@
 
 ## Side Projects
 
-### OnCue Labs · AI 페르소나 음성 통화 서비스 · 2026.09 · [GitHub](https://oncue-labs.github.io/oncue-orchestration/)
+### OnCue Labs · AI 페르소나 음성 통화 서비스 · 2026.09 · [GitHub](https://github.com/oncue-labs)
 
 1인 개발 Flutter · Spring Boot · FastAPI · WebRTC · OpenAI Realtime API
 
