@@ -1,79 +1,101 @@
-# AI Engineer Resume
+# **김주연 · AI Application Engineer**
+
+[kkjuyeon@gmail.com](mailto:kkjuyeon@gmail.com) · [GitHub](https://github.com/Yeonny0723) · [LinkedIn](http://www.linkedin.com/in/juyeon-kim-6a227a207) · [Blog](https://yeonny0723.github.io/blog/)
 
 ## Summary
 
-4년차 개발자로, 암호화된 보안 문서를 공유·열람·협업하는 문서보안 솔루션에서 반복 문서 생성 기능을 개발하고, Text2SQL의 동의어·다의어 대응을 위한 시맨틱 레이어를 보강하며 평가셋을 구축했습니다. 메일 피싱 훈련 서비스에서는 훈련 메일 템플릿과 보안 퀴즈 생성 기능을 개발했고, AI 서버 운영과 장애 복구까지 맡았습니다. 이전에는 사내 업무 시스템을 개발하며 화면·API·데이터 흐름을 다뤘고, 현재는 Python·OpenAI SDK·LangChain으로 필요한 파이프라인 단계만 멀티턴으로 선택·실행하도록 설계해 AI 기능을 실제 제품과 운영 환경으로 확장해 왔습니다.
+팀과 제품의 성장을 우선하고, 호기심을 바탕으로 업무의 경계를 넓혀온 4년차 개발자입니다. 현재 보안 문서 플랫폼 Wrapsody와 보안교육 제품 Mind-SAT에서 문서 생성 Agent, 멀티모달 훈련 콘텐츠 생성 Agent, RAG·Text2SQL 품질 평가를 개발하고 AI 서버를 운영하고 있습니다.
 
-## About
-
-팀과 제품의 성장을 우선하고, 배우고 공유하는 문화를 즐기며 업무의 경계를 넓혀 온 개발자입니다. 프론트엔드에서 시작해 백엔드와 AI 애플리케이션 개발까지 범위를 확장하며, 하나의 기능을 특정 기술 영역이 아니라 제품의 전체 흐름으로 바라보는 기준을 세웠습니다.
-
-작년부터는 프론트엔드 제품 개발과 AI 애플리케이션 개발을 동시에 진행하며, 화면·백엔드·데이터·검증·운영을 연결하는 방식으로 제품 개발에 기여하고 있습니다. 새로운 기술을 빠르게 학습하고 실제 업무에 적용하며, 배우고 도전하는 태도를 긍정적으로 평가받아 담당 업무와 협업 범위를 넓힐 수 있었습니다. 올해는 AI 기능 개발과 품질 평가, 자동화·운영 개선에서 성과를 만들며 업무 범위와 개발 효율을 함께 높여 왔습니다.
+프론트엔드에서 시작해 백엔드, AI 애플리케이션, 운영까지 범위를 넓혀 오며, 하나의 기능을 제품의 전체 흐름으로 보는 기준을 세웠습니다. 새로운 기술을 많이 쓰기보다 복잡한 문제를 적절한 경계로 나누고, 코드·규칙·AI가 책임질 범위를 명확히 하는 것을 중요하게 생각합니다. AI 기능에서도 평가셋, 모델 비교, 입력·실행·결과 검증으로 LLM의 불확실성을 운영 가능한 기준으로 바꾸어 왔습니다. 이 경험으로 새로운 AI 기능을 기존 제품에 안정적으로 도입하고, 팀이 더 빠르게 시도하며 안전하게 제품을 발전시킬 수 있도록 기여하겠습니다.
 
 ## Core Skills
 
-**AI SDK & Tooling** OpenAI SDK · LangChain · Hugging Face Transformers · MCP · OCI · Pandas · NumPy
-
-**Backend Stack** Python · FastAPI · Node.js · Express · ASP.NET Core · MSSQL
-
-**Frontend & Quality** React · TypeScript · Next.js · Playwright · Storybook
-
-**Delivery** Docker · Jenkins · GitLab CI/CD
+| 분야 | 기술 |
+| --- | --- |
+| AI·LLM | OpenAI SDK · Responses API · Code Interpreter · LangChain · MCP · vLLM · OpenAI Realtime API · LLM 평가셋 설계 |
+| Backend | Python · FastAPI · Java · Spring Boot · JPA · MySQL · Redis · Node.js · Express |
+| Infra·Security | OCI · Docker · OpenAI Network Policy · Prompt Injection 검증 · Jenkins · GitLab CI/CD |
+| Frontend·Quality | React · TypeScript · Next.js · Flutter · Playwright |
 
 ## Work Experience
 
 ### Fasoo AI · Software Engineer · 2023.04 – 현재
 
-#### AI 제품과 평가 체계 · 2026
+#### AI 제품 개발 · 2025 – 현재
 
-- **원천 문서와 템플릿을 결합하는 Agentic 문서 생성 기능 개발** — 사내 반복 문서 생성 업무를 자동화해 보고서·신청서·검토서·제안서 형태의 신규 문서를 만드는 기능을 개발했습니다.
-  - 초기 기획에 정의된 기능만 구현하지 않고, 사용자가 수 분 동안 화면을 붙잡지 않아도 되고 생성 중 이탈 후 다시 들어와 작업을 확인할 수 있어야 한다는 사용성 요구를 직접 제안했습니다. 추론이 누락된 영역과 오류 위치를 결과에 표시해 사용자가 전체 문서를 다시 검토하지 않고 필요한 지점만 리뷰하도록 기능·비기능 요구사항으로 구체화했습니다.
-  - docx·xlsx·pptx마다 구조와 표현 단위가 달라 같은 파이프라인을 반복 실행하면 불필요한 LLM 호출이 늘어났기 때문에, 파일 구조·교체 영역·내용 추론과 렌더링을 멀티턴 파이프라인으로 나누고 입력에 필요한 단계만 Agent가 선택하도록 했습니다. 값 변환처럼 구조 추론이 필요 없는 경우에는 해당 단계를 건너뛰고, 포맷별 허용 연산자와 문서 생성용 문법으로 자율 실행 범위를 제한했습니다.
-  - 청킹 전략과 모델·프롬프트 조합을 기준 데이터로 비교하고 입력 캐시·독립 단계 병렬 처리를 적용해 생성 시간을 4~5분에서 1~2분, 문서 1건 평균 비용을 약 350원에서 100원, 슬롯 누락률을 약 20%에서 2% 수준으로 줄였습니다.
+**Wrapsody 문서 생성 Agent (메인 개발)**
 
-- **긴 문서 생성 작업을 안정적으로 처리하는 비동기 파이프라인 개발** — 수 분이 걸리는 문서 생성을 사용자가 기다리는 API 요청과 분리했습니다.
-  - 처리 중 API timeout이나 서버 중단이 발생해도 사용자가 결과와 실패 위치를 확인할 수 있도록 접수 번호를 먼저 반환하고, 백그라운드 작업이 생성·상태 갱신·결과 저장을 맡게 했습니다. 완료·실패·시간초과를 화면에서 추적하고 중단된 작업을 재시작한 뒤 남은 자원을 정리할 수 있어 긴 작업을 제품 흐름 안에서 안정적으로 운영할 수 있게 했습니다.
+- 파일 구조 해석 → 변경 영역 추론 → 생성 → 렌더링 파이프라인을 설계하고, 멀티턴 Agent가 요청에 필요한 단계·도구만 선택하도록 구성
+- 사용자의 불명확한 요구를 역질문으로 구체화하고, 파일 구조 분석 → 변경 영역 확인 → 변경 계획 → Python 코드 생성·실행 → 렌더링 → 보안 검증으로 이어지는 Agent 파이프라인을 구성
+- 긴 문서를 약 8,000자 단위로 나눠 변경 계획에 필요한 청크를 선택하고, 이전 멀티턴 이력과 함께 다음 단계에 전달
+- API와 ThreadPool 워커를 분리하고 Spring Boot·MySQL로 세션·작업 상태를 관리해 화면 종료·재접속 후에도 진행 상태를 복원
+- 요청 등록·처리·결과 조회 API를 분리하고 작업 상태를 영속화해 비동기 문서 생성 작업의 전체 수명주기를 설계
+- Java·Spring Boot는 요청·세션·작업 오케스트레이션을, Python 서버는 문서 분석·코드 생성·실행·렌더링을 담당하도록 책임을 분리
+- Server-Sent Events(SSE)로 작업 단계·진행 상태·실패 원인을 실시간 전달
+- OpenAI Responses API·Code Interpreter로 생성된 Python 파일을 격리된 샌드박스에서 실행하고, 실패 원인을 모델에 재전달해 수정 코드를 재생성
+- 사용자 지침·이전 대화·원천 파일·템플릿의 Prompt Injection과 OpenAI Network Policy 위반 가능성을 검증하고, 결과 Office 파일의 Macro·VBA·ActiveX·OLE·외부 참조 요소를 ZIP/XML 구조로 검사
 
-- **Wrapsody AI 검색·RAG·Text2SQL 품질 평가 체계 구축** — 문서보안 솔루션의 검색 결과와 AI 답변 품질을 같은 기준으로 반복 검증했습니다.
-  - 사용자의 다의어·동의어 표현과 문서 표현이 달라 기대 문서를 놓치고, Text2SQL·문서 검색·최종 RAG 답변을 한 번에 보면 실패 단계를 구분하기 어려웠습니다. 이를 분리해 검증할 수 있도록 expected document/span과 기대 답변을 정의한 36개 golden dataset을 만들고 Playwright로 여러 테스트 서버에서 반복 실행했으며, 단계별 결과를 비교해 검색 문제와 생성 문제를 구분하고 모델 변경 전후를 같은 평가셋으로 검증했습니다.
+**검색·RAG 답변 품질 평가 체계**
 
-- **Mind-SAT AI 메일 템플릿·보안 퀴즈 생성 기능 개발** — 메일 유형별 필수 요소와 대상자 정보가 prompt에서 빠지면 결과 품질이 흔들리고 긴 LLM 요청이 사용자를 오래 기다리게 했기 때문에, OpenAI SDK·LangChain 기반 Python 백엔드에 산업군·부서·직급·기술 이해도·위협 수준을 컨텍스트로 구조화하고 메일 템플릿·보안 퀴즈 생성 기능을 연결했습니다. 생성 결과는 sanitize 처리하고 서버 동시성·비동기 처리 기준을 적용해 결과를 안전하고 일관되게 제공했습니다.
+- 로컬 LLM(Qwen, vLLM)의 모델·파라미터가 바뀌어도 바로 성능을 확인할 수 있도록, 기대 문서·구간·답변을 정의한 36개 평가셋으로 Text2SQL·검색·답변 단계를 분리 검증하는 회귀 평가를 Playwright로 자동화
+- 평가에서 드러난 동의어·다의어 질의 오류를 Text2SQL 시멘틱 레이어(동의어 사전·컬럼 설명) 보강으로 해결, 평가셋 정답 20/36 → 36/36
+- 동일 프롬프트·파이프라인에서 Gemma 4 26B-A4B와 Qwen3.5-27B(모두 FP8, RTX 5090)를 비교해, Qwen3.5의 상대 시간 표현(어제, 최근 등)과 파일 유형에서 확장자 확장 등의 질의 누락·오류를 확인
+- 고객 문서가 외부로 나가지 않도록 내부망의 로컬 LLM으로 처리하고, 기존 인증 서버의 JWT 검증·문서 권한 체크와 연동
 
-- **AI 서버 장애 복구 구조 개발** — 단일 인스턴스 장애로 AI 기능 전체가 중단되는 위험을 줄이기 위해 애플리케이션 변경을 최소화하는 OCI Instance Pool 2대·Private Load Balancer·Health Check를 구성하고, 실제 인스턴스 중지 테스트로 장애 인스턴스 제외와 신규 인스턴스 보충을 확인해 PROD 컷오버까지 완료했습니다.
+**Mind-SAT 보안 훈련 콘텐츠 생성 Agent (메인 개발)**
 
-#### 제품·플랫폼 개발 · 2023–2025
+- 산업군·직급·위협 수준을 반영해 훈련 메일·보안 퀴즈를 생성하는 멀티턴 Agent를 OpenAI SDK·LangChain으로 개발
+- 담당자가 수신 메일을 추출해 직접 보안 검사 후 HTML로 등록하던 과정을, 메일 캡처 이미지 업로드만으로 OCR 해석 → 위협 링크 제거 → UI 요소만 템플릿으로 재구성하도록 대체 (31개 고객사 사용)
+- LLM이 생성한 HTML을 신뢰할 수 없는 입력으로 보고 sanitize와 인라인 CSS 속성 화이트리스트로 스크립트 실행 가능 요소를 제거
 
-- **M365 Web Add-in 멀티테넌트 플랫폼 개발** — C#/.NET Outlook 클라이언트를 Office.js 기반으로 전환하고, 제품 기능·M365 연동·고객사 설정을 분리했습니다.
-  - React·TypeScript 모노레포와 Provider 계층으로 제품 도메인·M365·shared 경계를 나눠 고객사별 설정과 제품별 배포를 독립적으로 관리할 수 있게 했습니다.
+**Mind-SAT AI 서버 단독 개발·고가용성 구축**
 
-- **제품 전반의 개발·배포 흐름 구현** — React·TypeScript·Node.js·ASP.NET Core·MSSQL 제품에서 화면·API·데이터·배포를 함께 다뤘습니다.
-  - Jenkins/GitLab CI/CD를 연결해 반복 검증과 배포 산출물 추적이 가능한 흐름을 만들었습니다.
+- OCI Instance Pool·Load Balancer로 트래픽을 분산하고 장애 인스턴스를 자동 교체해 단일 장애점을 없애고, 장애 시 1분 이내 복구
+
+#### 제품·플랫폼 개발 · 2023 – 2025
+
+- **Mind-SAT 프론트엔드**: 31개 고객사가 쓰는 OTP/MFA·권한별 화면·학습·퀴즈·관리자 통계 흐름 구현. 메일·AI·백엔드·프론트 서버를 잇는 종단 E2E 테스트로 다중 서버 검증 시간 80% 단축
+- **디자인 시스템·MCP 서버**: 공통 UI 라이브러리를 사내 시스템 6개·제품 3개에 적용. 컴포넌트·디자인 토큰 검색 Tool을 제공하는 MCP 서버를 개발해, AI가 UI 생성 시 기존 컴포넌트·훅·아이콘을 재사용하도록 유도하고 중복 구현을 줄임
+- **M365 Web Add-in 멀티테넌트 플랫폼**: C#/.NET Outlook 클라이언트를 Office.js 기반 React·TypeScript로 전환하고, Node.js·Express 프록시 서버와 모노레포 공통 계층 구축
+- **사내 정보관리 시스템**: 인사·결재·고객 관리 시스템을 React·ASP.NET Core·MSSQL로 마이그레이션하고 ERP 동기화 스케줄러 개발. GitLab Runner·Jenkins로 빌드·검증·배포 자동화
+
+### 엘리스 · React 코치 · 2021.08 – 2021.11
+
+- SW 트랙 3기·AI 트랙 7기 예비 개발자 약 120명 대상 React 개념 강의, 실습 문제 풀이, 코드 리뷰
 
 ### MyCelebs · Data Engineer Intern · 2021.08 – 2021.11
 
-- **검색어 추천 데이터셋 구축** — Python·Selenium·BeautifulSoup으로 리뷰를 수집하고 Mecab·TF-IDF·클러스터링 전처리 흐름에 참여했습니다.
+- 리뷰 데이터 수집과 Mecab·TF-IDF·클러스터링 전처리로 검색어 추천 모델의 학습 데이터셋 구축 지원
 
-## SIDE PROJECT
+## Side Projects
 
-### agent-orchestration · AI Agent 개발 하네스 · 2026.08 – 현재
+### OnCue Labs · AI 페르소나 음성 통화 서비스 · 2026.09 · [GitHub](https://oncue-labs.github.io/oncue-orchestration/)
 
-- **AI Agent 기반 개발 하네스 개발** — 작업 규모에 따라 spec 승인·TDD 구현·테스트 검증·PR 작성 절차를 달리하는 도구를 단독 설계·개발했습니다.
-  - 모든 작업에 같은 절차를 적용하면 단순 작업은 느려지고 복잡한 작업은 검증 단계가 빠질 수 있어, 작업 규모에 따라 기획 깊이와 승인 경계를 나누고 Claude Code·Codex의 차이는 plugin adapter로 감싸 공통 skill에서 판단 기준을 유지했습니다.
-  - **안전성 검증** — 결함 주입 시 사용자 변경사항이 손실되지 않도록 byte snapshot·SHA-256 검증·무조건 복원 절차를 구성했습니다.
+1인 개발 Flutter · Spring Boot · FastAPI · WebRTC · OpenAI Realtime API
 
-### PFPlay · Frontend / Realtime / Infra · 2025.06 – 현재
+- 예약 시각에 AI 페르소나가 iOS 앱으로 전화를 거는 서비스. APNs VoIP Push → CallKit 수신 → WebSocket 시그널링 → WebRTC 음성 연결로 구성
 
-- **다중 사용자가 참여하는 실시간 음악 서비스 개발** — Next.js·WebSocket 기반으로 OAuth PKCE 인증, playlist·DJ 대기열·moderation 흐름을 구현했습니다.
-  - 여러 사용자의 상태 전이를 한 화면만으로 검증하기 어려워 Playwright 다중 세션으로 로그인부터 퇴장까지 테스트하고, GCP에서 Vercel로 이전해 Preview·GitHub Actions CI/CD까지 연결했습니다.
+### agent-orchestration · AI 개발 워크플로우 플러그인 · 2026.08 – 현재 · [GitHub](https://github.com/Yeonny0723/agent-orchestration)
 
-## EDUCATION
+- AI 코딩 에이전트가 변경이 쉬운 living spec을 기준으로 작은 Task 단위의 구현·리뷰·커밋 루프를 돌도록 하는 Claude Code·Codex 플러그인
+- TDD, 테스트 민감도(mutation) 검증, 설계 비판 리뷰, Issue/PR 작성 등 15개 스킬을 제작해 Claude Code·Codex 플러그인 마켓플레이스로 배포
 
-- RMIT University 정보시스템학과 · 2018.07 – 2022.12 · GPA 3.8 / 4.0
-- 멋쟁이사자처럼 AI 스쿨 · 2021.03 – 2021.08
+### PFPlay · 실시간 음악 스트리밍 DJ 플랫폼 · 2025.06 – 현재 · [GitHub](https://github.com/pfplay/pfplay-web)
 
-## CERTIFICATIONS & ACTIVITIES
+- Next.js 기반 OAuth PKCE 인증, NFT 지갑 연결, WebSocket 기반 재생·대기열 이벤트 흐름 구현
+- 수동 재현이 어려운 다중 사용자 실시간 상태 전이를 Playwright E2E로 자동화, GCP → Vercel 인프라 이전
+
+## Education
+
+- RMIT University · Information Systems · 2018.07 – 2022.12 · GPA 3.8 / 4.0
+- 멋쟁이사자처럼 AI 스쿨 · 2021.03 – 2021.08 · Python 기반 데이터 수집·전처리, 통계 분석, 머신러닝 모델 학습·평가
+
+## Certifications
 
 - AWS Certified Solutions Architect – Associate (SAA)
-- ITT 비즈니스 영어-한국어 통번역 자격증
-- 오픈소스 기여 모임 10기
-- Elice React 실습 코치 · 약 120명의 예비 개발자 대상
+- ITT 비즈니스 영어-한국어 통번역
+
+## Activities
+
+- 한국 오픈소스 기여 모임 10기
+- UN 한국·호주 전자정부 웹표준 평가 참여
