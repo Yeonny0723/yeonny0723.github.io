@@ -2,7 +2,16 @@
 
 김주연의 AI Engineer / Frontend Engineer 커리어 문서 사이트.
 
-**https://yeonny0723.github.io/portfolio/**
+**https://yeonny0723.github.io/**
+
+문서별 공유 URL:
+
+- `/resume/ai-engineer/`
+- `/resume/frontend-engineer/`
+- `/career-description/ai-engineer/`
+- `/career-description/frontend-engineer/`
+- `/portfolio/ai-engineer/`
+- `/portfolio/frontend-engineer/`
 
 ## 내용 고치기
 

@@ -7,6 +7,9 @@ import aiPlatformDoc from '/content/portfolio/ai-platform.md';
 import mindsatAiDoc from '/content/portfolio/mindsat-ai.md';
 import designSystemMcpDoc from '/content/portfolio/design-system-mcp.md';
 import frontendPlatformDoc from '/content/portfolio/frontend-platform.md';
+import aiOverviewDoc from '/content/portfolio/ai-overview.md';
+import openSourceDoc from '/content/portfolio/open-source.md';
+import pfplayDoc from '/content/portfolio/pfplay.md';
 
 import type { CareerDocument, Doc, DocumentKind, Position, ViewState } from '../types';
 
@@ -31,11 +34,12 @@ const portfolioBodyHtml = html(
 );
 
 const portfolioAiBodyHtml = html(
-  positioning,
+  aiOverviewDoc as unknown as RawDocument,
   aiPlatformDoc as unknown as RawDocument,
   mindsatAiDoc as unknown as RawDocument,
   designSystemMcpDoc as unknown as RawDocument,
-  frontendPlatformDoc as unknown as RawDocument,
+  openSourceDoc as unknown as RawDocument,
+  pfplayDoc as unknown as RawDocument,
 );
 
 const portfolioFrontendBodyHtml = html(

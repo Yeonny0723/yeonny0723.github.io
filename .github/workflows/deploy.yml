@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - 'portfolio/**'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 permissions:
@@ -10,7 +13,6 @@ permissions:
   pages: write
   id-token: write
 
-# 배포는 한 번에 하나만. 연달아 push 해도 마지막 것만 나간다.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -28,14 +30,16 @@ jobs:
       - run: corepack enable
 
       - run: yarn install --immutable
+        working-directory: portfolio
 
       - run: yarn build
+        working-directory: portfolio
 
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: portfolio/dist
 
   deploy:
     needs: build

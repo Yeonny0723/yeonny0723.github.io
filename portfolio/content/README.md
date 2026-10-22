@@ -4,20 +4,21 @@
 
 ## 파일 구조
 
-| 경로 | 역할 |
-|---|---|
-| `profile.md` | 이름·연락처·공통 소개 |
-| `positioning.md` | 포트폴리오 공통 포지셔닝 |
-| `resume/ai.md` | AI Engineer 이력서 |
-| `resume/frontend.md` | Frontend Engineer 이력서 |
-| `career/ai.md` | AI Engineer 경력기술서 |
+
+| 경로                   | 역할                      |
+| -------------------- | ----------------------- |
+| `profile.md`         | 이름·연락처·공통 소개            |
+| `resume/ai.md`       | AI Engineer 이력서         |
+| `resume/frontend.md` | Frontend Engineer 이력서   |
+| `career/ai.md`       | AI Engineer 경력기술서       |
 | `career/frontend.md` | Frontend Engineer 경력기술서 |
-| `portfolio/*.md` | 제품 개발 방식과 프로젝트 사례 |
-| `skills.md` | 기술 역량 |
-| `education.md` | 학력 |
-| `certifications.md` | 자격증 |
-| `activities.md` | 교육·커뮤니티 활동 |
-| `links.md` | 외부 링크 |
+| `portfolio/*.md`     | 제품 개발 방식과 프로젝트 사례       |
+| `skills.md`          | 기술 역량                   |
+| `education.md`       | 학력                      |
+| `certifications.md`  | 자격증                     |
+| `activities.md`      | 교육·커뮤니티 활동              |
+| `links.md`           | 외부 링크                   |
+
 
 ## 작성 원칙
 

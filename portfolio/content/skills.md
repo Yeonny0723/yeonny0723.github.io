@@ -33,6 +33,8 @@ skills:
 
 **Backend Stack** Python · FastAPI · Node.js · Express · ASP.NET Core · MSSQL
 
-**AI SDK & Tooling** OpenAI SDK · LangChain · Hugging Face Transformers · MCP · OCI · Pandas · NumPy
+**AI Frameworks & SDKs** OpenAI SDK · LangChain · Hugging Face Transformers · MCP
 
-**Delivery Tools** Docker · Jenkins · GitLab CI/CD
+**Data Libraries** Pandas · NumPy
+
+**Cloud & Delivery** OCI · Docker · Jenkins · GitLab CI/CD

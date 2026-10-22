@@ -180,6 +180,12 @@ function DetailPage({ route }: { route: Exclude<Route, { kind: 'home' }> }) {
       ? getDocumentView({ kind: 'portfolio', position: route.position })
       : null;
 
+  useEffect(() => {
+    if ('position' in route && route.position) {
+      window.document.title = `김주연 · ${route.position === 'ai' ? 'AI Application Engineer' : 'Frontend Engineer'}`;
+    }
+  }, [route]);
+
   return (
     <div className={`${styles.page} ${styles.standalonePage}`}>
       <a className="skip-link" href="#main">본문 바로가기</a>
